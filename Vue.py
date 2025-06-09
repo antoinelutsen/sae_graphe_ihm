@@ -1,13 +1,13 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout
-from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen
+from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt
 
 class VuePlan(QWidget):
     def __init__(self, image_path: str, scale_percent: int = 100, cell_size: int = 8):
         super().__init__()
 
-        self.setWindowTitle("Plan quadrillé redimensionné")
+        self.setWindowTitle("Plan quadrillé avec secteurs par cases")
         self.image_path = image_path
         self.scale_percent = scale_percent
         self.cell_size = cell_size
@@ -27,10 +27,24 @@ class VuePlan(QWidget):
 
         self.setFixedSize(self.pixmap_scaled.size())
 
-        # Define inaccessible cells as set of (row, col) en gros ligne puis colonne
-        # Exemple : [(0,0), (1,3), (5,10), ...]
         self.inaccessible_cells = {
-            (5, 10), (7, 12)  # à adapter toi-même
+            (5, 10), (7, 12)
+        }
+
+        # Exemple de secteurs définis par des cases à refaire et compléter
+        self.sectors = {
+            "Fruits": {
+                "color": QColor(255, 200, 200, 120),
+                "cells": {(20, col) for col in range(40, 51)}.union({(row, col) for row in range(21, 26) for col in range(50, 56)})
+            },
+            "Charcuterie": {
+                "color": QColor(200, 255, 200, 120),
+                "cells": {(row, col) for row in range(10, 20) for col in range(10, 30)}
+            },
+            "Légumes": {
+                "color": QColor(200, 200, 255, 120),
+                "cells": {(row, col) for row in range(30, 40) for col in range(60, 70)}
+            }
         }
 
         self.show()
@@ -39,36 +53,41 @@ class VuePlan(QWidget):
         painter = QPainter(self)
         painter.drawPixmap(self.rect(), self.pixmap_scaled)
 
-        pen = QPen(QColor(0, 255, 0, 180))
-        pen.setWidth(1)
-        painter.setPen(pen)
-
         width = self.pixmap_scaled.width()
         height = self.pixmap_scaled.height()
 
-        # Draw grid
+        pen_grid = QPen(QColor(0, 255, 0, 180))
+        pen_grid.setWidth(1)
+        painter.setPen(pen_grid)
+
         for x in range(0, width, self.cell_size):
             painter.drawLine(x, 0, x, height)
 
         for y in range(0, height, self.cell_size):
             painter.drawLine(0, y, width, y)
 
-        # Draw inaccessible cells in opaque black
-        brush_color = QColor(0, 0, 0, 255)
-        painter.setBrush(brush_color)
+        brush_black = QColor(0, 0, 0, 255)
+        painter.setBrush(brush_black)
         painter.setPen(Qt.PenStyle.NoPen)
-
         for (row, col) in self.inaccessible_cells:
             rect_x = col * self.cell_size
             rect_y = row * self.cell_size
             painter.drawRect(rect_x, rect_y, self.cell_size, self.cell_size)
+
+        # Draw sectors cases with colors
+        for sector in self.sectors.values():
+            painter.setBrush(QBrush(sector["color"]))
+            painter.setPen(Qt.PenStyle.NoPen)
+            for (row, col) in sector["cells"]:
+                rect_x = col * self.cell_size
+                rect_y = row * self.cell_size
+                painter.drawRect(rect_x, rect_y, self.cell_size, self.cell_size)
 
     def mousePressEvent(self, event):
         pos = event.position().toPoint()
         col = pos.x() // self.cell_size
         row = pos.y() // self.cell_size
         if (row, col) in self.inaccessible_cells:
-            # Click ignored on inaccessible cell
             return
         print(f"Clicked at x={pos.x()}, y={pos.y()}")
         print(f"Grid cell clicked: row={row}, col={col}")
