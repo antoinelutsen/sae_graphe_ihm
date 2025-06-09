@@ -1,10 +1,10 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen
-from PyQt6.QtCore import Qt, QRect
+from PyQt6.QtCore import Qt
 
 class VuePlan(QWidget):
-    def __init__(self, image_path: str, scale_percent: int = 100, cell_size: int = 10):
+    def __init__(self, image_path: str, scale_percent: int = 100, cell_size: int = 8):
         super().__init__()
 
         self.setWindowTitle("Plan quadrillé redimensionné")
@@ -26,30 +26,51 @@ class VuePlan(QWidget):
         )
 
         self.setFixedSize(self.pixmap_scaled.size())
+
+        # Define inaccessible cells as set of (row, col) en gros ligne puis colonne
+        # Exemple : [(0,0), (1,3), (5,10), ...]
+        self.inaccessible_cells = {
+            (5, 10), (7, 12)  # à adapter toi-même
+        }
+
         self.show()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.drawPixmap(self.rect(), self.pixmap_scaled)
 
-        pen = QPen(QColor(0, 255, 0, 180))  # semi-transparent green
+        pen = QPen(QColor(0, 255, 0, 180))
         pen.setWidth(1)
         painter.setPen(pen)
 
         width = self.pixmap_scaled.width()
         height = self.pixmap_scaled.height()
 
+        # Draw grid
         for x in range(0, width, self.cell_size):
             painter.drawLine(x, 0, x, height)
 
         for y in range(0, height, self.cell_size):
             painter.drawLine(0, y, width, y)
 
+        # Draw inaccessible cells in opaque black
+        brush_color = QColor(0, 0, 0, 255)
+        painter.setBrush(brush_color)
+        painter.setPen(Qt.PenStyle.NoPen)
+
+        for (row, col) in self.inaccessible_cells:
+            rect_x = col * self.cell_size
+            rect_y = row * self.cell_size
+            painter.drawRect(rect_x, rect_y, self.cell_size, self.cell_size)
+
     def mousePressEvent(self, event):
         pos = event.position().toPoint()
-        print(f"Clicked at x={pos.x()}, y={pos.y()}")
         col = pos.x() // self.cell_size
         row = pos.y() // self.cell_size
+        if (row, col) in self.inaccessible_cells:
+            # Click ignored on inaccessible cell
+            return
+        print(f"Clicked at x={pos.x()}, y={pos.y()}")
         print(f"Grid cell clicked: row={row}, col={col}")
 
 if __name__ == "__main__":
