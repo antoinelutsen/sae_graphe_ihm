@@ -1,9 +1,11 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt,  pyqtSignal
 
 class VuePlan(QWidget):
+    celluleCliquee = pyqtSignal(int, int)
+
     def __init__(self, image_path: str, scale_percent: int = 100, cell_size: int = 8):
         super().__init__()
 
@@ -91,6 +93,7 @@ class VuePlan(QWidget):
             return
         print(f"Clicked at x={pos.x()}, y={pos.y()}")
         print(f"Grid cell clicked: row={row}, col={col}")
+        self.celluleCliquee.emit(row, col)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
