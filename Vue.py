@@ -31,21 +31,78 @@ class VuePlan(QWidget):
             (5, 10), (7, 12)
         }
 
-        # Exemple de secteurs définis par des cases à refaire et compléter
         self.sectors = {
-            "Fruits": {
-                "color": QColor(255, 200, 200, 120),
-                "cells": {(20, col) for col in range(40, 51)}.union({(row, col) for row in range(21, 26) for col in range(50, 56)})
-            },
-            "Charcuterie": {
-                "color": QColor(200, 255, 200, 120),
-                "cells": {(row, col) for row in range(10, 20) for col in range(10, 30)}
-            },
-            "Légumes": {
-                "color": QColor(200, 200, 255, 120),
-                "cells": {(row, col) for row in range(30, 40) for col in range(60, 70)}
-            }
-        }
+    "Fruits et Legumes": {
+        "color": QColor(144, 238, 144, 120),
+        "cells": {(row, col) for row in range(13, 48) for col in range(31, 49)}
+    },
+    "Charcuterie": {
+        "color": QColor(255, 182, 193, 120),
+        "cells": {(row, col) for row in range(13, 48) for col in range(28, 30)},
+        "cells2": {(row, col) for row in range(31, 48) for col in range(23, 24)}
+    },
+    "Poissonnerie": {
+        "color": QColor(135, 206, 250, 120),
+        "cells": {(row, col) for row in range(2, 12) for col in range(2, 13)}
+    },
+    "Fromage": {
+        "color": QColor(255, 255, 153, 120),
+        "cells": {(row, col) for row in range(2, 6) for col in range(19, 33)}
+    },
+    "Viandes / Boucherie": {
+        "color": QColor(255, 99, 71, 120),
+        "cells": {(row, col) for row in range(1, 8) for col in range(35, 115)}
+    },
+    "Surgeles": {
+        "color": QColor(173, 216, 230, 120),
+        "cells": {(row, col) for row in range(12, 49) for col in range(50, 63)}
+    },
+    "Epicerie": {
+        "color": QColor(240, 230, 140, 120),
+        "cells": {(row, col) for row in range(40, 55) for col in range(20, 35)}
+    },
+    "Boissons / Eaux": {
+        "color": QColor(135, 206, 235, 120),
+        "cells": {(row, col) for row in range(40, 50) for col in range(10, 20)}
+    },
+    "Cave a vins": {
+        "color": QColor(199, 21, 133, 120),
+        "cells": {(row, col) for row in range(40, 50) for col in range(5, 10)}
+    },
+    "Textile": {
+        "color": QColor(216, 191, 216, 120),
+        "cells": {(row, col) for row in range(25, 35) for col in range(40, 55)}
+    },
+    "Bazar": {
+        "color": QColor(255, 215, 0, 120),
+        "cells": {(row, col) for row in range(20, 55) for col in range(60, 75)}
+    },
+    "Entretien / Produits menagers": {
+        "color": QColor(224, 255, 255, 120),
+        "cells": {(row, col) for row in range(15, 20) for col in range(65, 75)}
+    },
+    "Saisonnier": {
+        "color": QColor(176, 224, 230, 120),
+        "cells": {(row, col) for row in range(35, 45) for col in range(55, 70)}
+    },
+    "Parfumerie / Beauté": {
+        "color": QColor(255, 192, 203, 120),
+        "cells": {(row, col) for row in range(25, 30) for col in range(50, 60)}
+    },
+    "Pain / Patisserie": {
+        "color": QColor(255, 228, 181, 120),
+        "cells": {(row, col) for row in range(15, 20) for col in range(40, 50)}
+    },
+    "Jus de fruits": {
+        "color": QColor(255, 160, 122, 120),
+        "cells": {(row, col) for row in range(55, 60) for col in range(5, 15)}
+    },
+    "Boutique / Telephonie": {
+        "color": QColor(100, 149, 237, 120),
+        "cells": {(row, col) for row in range(60, 65) for col in range(75, 80)}
+    }
+}
+
 
         self.show()
 
