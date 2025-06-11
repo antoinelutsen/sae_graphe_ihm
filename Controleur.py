@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QInputDialog, QMessageBox, QLineEdit
 from Modele import ModeleMagasin
 from Vue import *
 
+# Classe principale du contrôleur (MVC) : orchestre l'interaction entre la vue et le modèle
 class Controleur:
 
     def __init__(self):
@@ -31,13 +32,13 @@ class Controleur:
         self.vue_accueil = VueAccueil()
         self.vue_accueil.mode_selectionne.connect(self.changer_mode)
 
-    def lancer_application(self):
+    def lancer_application(self): # Lance la boucle principale de l'application
         self.vue_accueil.show()
         self.app.exec()
 
-    def changer_mode(self, mode):
+    def changer_mode(self, mode): # Gère le changement de mode depuis l'écran d'accueil (création ou utilisation)
         self.vue_accueil.close()
-        if mode == "creation":
+        if mode == "creation": # Mode création : demande un mot de passe puis ouvre l'interface de placement des produits
             mdp, ok = QInputDialog.getText(None, "Authentification", "Mot de passe :", echo=QLineEdit.EchoMode.Password)
             if ok and mdp == "admin":
                 self.vue_creation = VuePlanCreation("plan.jpg", cell_size=8)
@@ -47,7 +48,7 @@ class Controleur:
             else:
                 QMessageBox.warning(None, "Erreur", "Mot de passe incorrect")
                 self.vue_accueil.show()
-        elif mode == "utilisation":
+        elif mode == "utilisation": # Mode utilisation : charge les données du magasin et permet de consulter les produits par secteur
             self.vue_utilisation = VuePlanUtilisation("plan.jpg", cell_size=8)
             self.vue_utilisation.celluleCliquee.connect(self.traiter_clic_utilisation)
             donnees_vue = self.vue_utilisation.get_secteurs_et_cases()
@@ -56,6 +57,10 @@ class Controleur:
             self.vue_utilisation.show()
 
     def traiter_clic_utilisation(self, row, col):
+        # Lorsqu'une cellule est cliquée en mode utilisation :
+        # - identifie le secteur concerné
+        # - récupère les produits associés via le modèle
+        # - affiche les produits dans une infobulle ou vide l'affichage si aucun secteur
         for secteur, infos in self.vue_utilisation.sectors.items():
             if (row, col) in infos["cells"]:
                 rayon = self.correspondance_secteurs_rayons.get(secteur)
@@ -69,6 +74,10 @@ class Controleur:
             self.vue_utilisation.vider_produits_secteur()
 
     def traiter_clic_creation(self, row, col):
+        # Lorsqu'une cellule est cliquée en mode création :
+        # - récupère le dernier champ de saisie non vide
+        # - place le produit dans la grille via le modèle
+        # - vide le champ après placement ou affiche une erreur si aucun produit saisi
         dernier_champ = None
         for i in range(self.vue_creation.zone_produits.count()-1, -1, -1):
             widget = self.vue_creation.zone_produits.itemAt(i).widget()
@@ -84,6 +93,6 @@ class Controleur:
         else:
             self.vue_creation.afficher_popup("Erreur", "Veuillez d'abord saisir un produit avant de cliquer sur une case.")
 
-    def sauvegarder_donnees(self):
+    def sauvegarder_donnees(self): # Sauvegarde l'état actuel des produits placés dans un fichier CSV
         self.modele.sauvegarder_csv("produits_place.csv")
         self.vue_creation.afficher_popup("Sauvegarde", "Les produits ont été sauvegardés dans le fichier CSV.")
