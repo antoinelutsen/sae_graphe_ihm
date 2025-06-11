@@ -1,18 +1,18 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QTextEdit, QScrollArea, QFrame
+    QTextEdit, QScrollArea, QFrame, QMessageBox
 )
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal
 
 
-class VuePlan(QWidget):
+class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
 
     def __init__(self, image_path: str, cell_size: int = 8):
         super().__init__()
-        self.setWindowTitle("Plan avec interface détaillée")
+        self.setWindowTitle("Mode Utilisation")
 
         self.image_path = image_path
         self.cell_size = cell_size
@@ -159,9 +159,131 @@ class VuePlan(QWidget):
             return
         self.celluleCliquee.emit(row, col)
 
+class VuePlanCreation(QWidget):
+    celluleCliquee = pyqtSignal(int, int)
 
+    def __init__(self, image_path: str, cell_size: int = 8):
+        super().__init__()
+        self.setWindowTitle("Mode Création")
+
+        self.image_path = image_path
+        self.cell_size = cell_size
+
+        self.pixmap_original = QPixmap(self.image_path)
+        new_width = 1200
+        new_height = 1000
+        self.pixmap_scaled = self.pixmap_original.scaled(
+            new_width, new_height, Qt.AspectRatioMode.KeepAspectRatio
+        )
+
+        main_layout = QHBoxLayout(self)
+
+        self.plan_frame = QFrame()
+        self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
+        main_layout.addWidget(self.plan_frame)
+
+        right_panel = QVBoxLayout()
+        main_layout.addLayout(right_panel)
+
+        titre = QLabel("Mode Création")
+        titre.setStyleSheet("font-size: 16px; font-weight: bold;")
+        texte = QLabel("Cliquez sur une case libre pour ajouter un produit à cet emplacement.")
+        texte.setWordWrap(True)
+        texte.setMaximumHeight(100)
+        right_panel.addWidget(titre, stretch=0)
+        right_panel.addWidget(texte, stretch=1)
+
+        self.zone_produits = QVBoxLayout()
+        scroll_content = QWidget()
+        scroll_content.setLayout(self.zone_produits)
+
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(scroll_content)
+        right_panel.addWidget(scroll_area, stretch=4)
+
+        self.bouton_ajout = QPushButton("+ Ajouter un produit")
+        self.bouton_ajout.clicked.connect(self.ajouter_champ_produit)
+        right_panel.addWidget(self.bouton_ajout, stretch=0)
+        self.bouton_sauvegarder = QPushButton("💾 Sauvegarder")
+        right_panel.addWidget(self.bouton_sauvegarder, stretch=0)
+
+        self.inaccessible_cells = {(5, 10), (7, 12)}
+        self.sectors = {}
+
+        self.dernier_champ = None
+        self.ajouter_champ_produit()
+
+        self.show()
+
+    def ajouter_champ_produit(self):
+        if self.dernier_champ is not None:
+            self.dernier_champ.setDisabled(False)
+        champ = QTextEdit()
+        champ.setFixedHeight(40)
+        champ.textChanged.connect(lambda: self.limiter_texte(champ))
+        self.zone_produits.addWidget(champ)
+        self.dernier_champ = champ
+
+    def limiter_texte(self, champ):
+        texte = champ.toPlainText()
+        if len(texte) > 100:
+            champ.setPlainText(texte[:100])
+            cursor = champ.textCursor()
+            cursor.setPosition(100)
+            champ.setTextCursor(cursor)
+
+    def afficher_popup(self, titre, message):
+        msg = QMessageBox()
+        msg.setWindowTitle(titre)
+        msg.setText(message)
+        msg.exec()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.drawPixmap(0, 0, self.pixmap_scaled)
+
+        width = self.pixmap_scaled.width()
+        height = self.pixmap_scaled.height()
+
+        pen_grid = QPen(QColor(0, 255, 0, 180))
+        pen_grid.setWidth(1)
+        painter.setPen(pen_grid)
+        for x in range(0, width, self.cell_size):
+            painter.drawLine(x, 0, x, height)
+        for y in range(0, height, self.cell_size):
+            painter.drawLine(0, y, width, y)
+
+        painter.setBrush(QColor(0, 0, 0))
+        painter.setPen(Qt.PenStyle.NoPen)
+        for (row, col) in self.inaccessible_cells:
+            painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
+
+        for sector in self.sectors.values():
+            painter.setBrush(QBrush(sector["color"]))
+            for (row, col) in sector["cells"]:
+                painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
+
+    def mousePressEvent(self, event):
+        pos = event.position().toPoint()
+        col = pos.x() // self.cell_size
+        row = pos.y() // self.cell_size
+        if (row, col) in self.inaccessible_cells:
+            return
+        self.celluleCliquee.emit(row, col)
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = VuePlanCreation("plan.jpg", cell_size=8)
+    window.show()
+    sys.exit(app.exec())
+
+
+"""
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = VuePlan("plan.jpg", cell_size=8)
     window.show()
     sys.exit(app.exec())
+"""

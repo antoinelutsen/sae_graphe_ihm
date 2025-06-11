@@ -10,6 +10,7 @@ class ModeleMagasin:
     def __init__(self):
         self.rayons = []
         self.produit_vers_rayon = {}
+        self.produits_positionnes = {}
 
     def charger_csv(self, chemin_csv: str, separateur=';'):
         with open(chemin_csv, encoding='utf-8') as fichier:
@@ -42,6 +43,19 @@ class ModeleMagasin:
             if rayon:
                 resultat.setdefault(rayon, []).append(produit)
         return resultat
+    
+    def ajouter_produit_emplacement(self, produit: str, row: int, col: int):
+        self.produits_positionnes[produit] = (self.get_rayon(produit), row, col)
+
+
+    def sauvegarder_csv(self, chemin: str):
+        with open(chemin, "w", newline='', encoding="utf-8") as f:
+            writer = csv.writer(f, delimiter=';')
+            writer.writerow(["Produit", "Rayon", "Ligne", "Colonne"])
+            for produit, (rayon, row, col) in self.produits_positionnes.items():
+                writer.writerow([produit, rayon, row, col])
+
+
 
 
 if __name__ == "__main__":
