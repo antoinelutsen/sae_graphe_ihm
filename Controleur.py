@@ -9,7 +9,10 @@ class Controleur:
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
         self.modele.charger_csv("liste_produits.csv")
-        
+        donnees_vue = self.vue.get_secteurs_et_cases()
+        self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
+        self.modele.charger_et_placer_produits("produits.csv", "produits_place_1.csv")
+ 
         self.correspondance_secteurs_rayons = {
             "Charcuterie": "Viandes",
             "Fruits": "Fruits",

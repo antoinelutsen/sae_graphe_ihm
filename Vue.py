@@ -183,6 +183,12 @@ class VuePlanUtilisation(QWidget):
             return
         self.celluleCliquee.emit(row, col)
 
+    def get_secteurs_et_cases(self):
+        return {
+            "sectors": {nom: infos["cells"] for nom, infos in self.sectors.items()},
+            "inaccessibles": self.inaccessible_cells
+        }
+
 class VuePlanCreation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
 
