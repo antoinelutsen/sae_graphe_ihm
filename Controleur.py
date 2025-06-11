@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QApplication, QInputDialog, QMessageBox, QLineEdit
 from Modele import ModeleMagasin
 from Vue import *
 
-# Classe principale du contrôleur (MVC) : orchestre l'interaction entre la vue et le modèle
+# Classe principale : orchestre l'interaction entre la vue et le modèle
 class Controleur:
 
     def __init__(self):
