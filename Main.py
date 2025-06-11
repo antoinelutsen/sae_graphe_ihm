@@ -1,5 +1,8 @@
 from Controleur import Controleur
 
-if __name__ == "__main__":
+def main():
     controleur = Controleur()
     controleur.lancer_application()
+
+if __name__ == "__main__":
+    main()

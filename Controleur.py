@@ -9,9 +9,6 @@ class Controleur:
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
         self.modele.charger_csv("liste_produits.csv")
-        donnees_vue = self.vue.get_secteurs_et_cases()
-        self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
-        self.modele.charger_et_placer_produits("produits.csv", "produits_place_1.csv")
  
         self.correspondance_secteurs_rayons = {
             "Charcuterie": "Viandes",
@@ -53,6 +50,9 @@ class Controleur:
         elif mode == "utilisation":
             self.vue_utilisation = VuePlanUtilisation("plan.jpg", cell_size=8)
             self.vue_utilisation.celluleCliquee.connect(self.traiter_clic_utilisation)
+            donnees_vue = self.vue_utilisation.get_secteurs_et_cases()
+            self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
+            self.modele.charger_et_placer_produits("liste_produits.csv", "produits_place_1.csv")
             self.vue_utilisation.show()
 
     def traiter_clic_utilisation(self, row, col):
