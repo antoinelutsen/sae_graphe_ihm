@@ -6,6 +6,28 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal
 
+class VueAccueil(QWidget):
+    mode_selectionne = pyqtSignal(str)  # "creation" ou "utilisation"
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Sélection du mode")
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.label = QLabel("Choisissez un mode :")
+        self.btn_creation = QPushButton("Création")
+        self.btn_utilisation = QPushButton("Utilisation")
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.btn_creation)
+        layout.addWidget(self.btn_utilisation)
+        self.setLayout(layout)
+
+        self.btn_creation.clicked.connect(lambda: self.mode_selectionne.emit("creation"))
+        self.btn_utilisation.clicked.connect(lambda: self.mode_selectionne.emit("utilisation"))
+
 
 class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
@@ -271,19 +293,3 @@ class VuePlanCreation(QWidget):
         if (row, col) in self.inaccessible_cells:
             return
         self.celluleCliquee.emit(row, col)
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = VuePlanCreation("plan.jpg", cell_size=8)
-    window.show()
-    sys.exit(app.exec())
-
-
-"""
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = VuePlan("plan.jpg", cell_size=8)
-    window.show()
-    sys.exit(app.exec())
-"""

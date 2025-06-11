@@ -54,25 +54,3 @@ class ModeleMagasin:
             writer.writerow(["Produit", "Rayon", "Ligne", "Colonne"])
             for produit, (rayon, row, col) in self.produits_positionnes.items():
                 writer.writerow([produit, rayon, row, col])
-
-
-
-
-if __name__ == "__main__":
-    modele = ModeleMagasin()
-    modele.charger_csv("liste_produits.csv")
-
-    test_produits = ["porc", "beurre", "abricots", "cervelas", "kiwis", "nonexistent"]
-
-    print("Rayon par produit :")
-    for produit in test_produits:
-        rayon = modele.get_rayon(produit)
-        print(f"  {produit} -> {rayon}")
-
-    print("\nProduits dans le rayon 'Viandes' :")
-    print(modele.get_produits("Viandes"))
-
-    print("\nRépartition des produits dans la liste :")
-    repartition = modele.produits_dans_liste(test_produits)
-    for rayon, produits in repartition.items():
-        print(f"  {rayon} : {produits}")

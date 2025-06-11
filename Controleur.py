@@ -1,17 +1,15 @@
 import sys
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QInputDialog, QMessageBox, QLineEdit
 from Modele import ModeleMagasin
-from Vue import VuePlanCreation
+from Vue import *
 
 class Controleur:
 
     def __init__(self):
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
-        self.vue = VuePlanCreation("plan.jpg", cell_size=8)
         self.modele.charger_csv("liste_produits.csv")
         
-        self.connecter_signaux()
         self.correspondance_secteurs_rayons = {
             "Charcuterie": "Viandes",
             "Fruits": "Fruits",
@@ -30,32 +28,47 @@ class Controleur:
             "Bureau": "Bureau",
             "Animaux": "Animaux"
         }
-
-    def connecter_signaux(self):
-        self.vue.celluleCliquee.connect(self.traiter_clic)
-        self.vue.bouton_sauvegarder.clicked.connect(self.sauvegarder_donnees)
+        self.vue_accueil = VueAccueil()
+        self.vue_accueil.mode_selectionne.connect(self.changer_mode)
 
     def lancer_application(self):
-        self.vue.show()
-        sys.exit(self.app.exec())
+        self.vue_accueil.show()
+        self.app.exec()
+
+    def changer_mode(self, mode):
+        self.vue_accueil.close()
+        if mode == "creation":
+            mdp, ok = QInputDialog.getText(None, "Authentification", "Mot de passe :", echo=QLineEdit.EchoMode.Password)
+            if ok and mdp == "admin":
+                self.vue_creation = VuePlanCreation("plan.jpg", cell_size=8)
+                self.vue_creation.celluleCliquee.connect(self.traiter_clic_creation)
+                self.vue_creation.bouton_sauvegarder.clicked.connect(self.sauvegarder_donnees)
+                self.vue_creation.show()
+            else:
+                QMessageBox.warning(None, "Erreur", "Mot de passe incorrect")
+                self.vue_accueil.show()
+        elif mode == "utilisation":
+            self.vue_utilisation = VuePlanUtilisation("plan.jpg", cell_size=8)
+            self.vue_utilisation.celluleCliquee.connect(self.traiter_clic_utilisation)
+            self.vue_utilisation.show()
 
     def traiter_clic_utilisation(self, row, col):
-        for secteur, infos in self.vue.sectors.items():
+        for secteur, infos in self.vue_utilisation.sectors.items():
             if (row, col) in infos["cells"]:
                 rayon = self.correspondance_secteurs_rayons.get(secteur)
                 if rayon:
                     produits = self.modele.get_produits(rayon)
-                    self.vue.afficher_produits_secteur(secteur, produits, col * self.vue.cell_size, row * self.vue.cell_size)
+                    self.vue_utilisation.afficher_produits_secteur(secteur, produits, col * self.vue_utilisation.cell_size, row * self.vue_utilisation.cell_size)
                 else:
-                    self.vue.afficher_produits_secteur(secteur, [])
+                    self.vue_utilisation.afficher_produits_secteur(secteur, [])
                 break
         else:
-            self.vue.vider_produits_secteur()
+            self.vue_utilisation.vider_produits_secteur()
 
     def traiter_clic_creation(self, row, col):
         dernier_champ = None
-        for i in range(self.vue.zone_produits.count()-1, -1, -1):
-            widget = self.vue.zone_produits.itemAt(i).widget()
+        for i in range(self.vue_creation.zone_produits.count()-1, -1, -1):
+            widget = self.vue_creation.zone_produits.itemAt(i).widget()
             if widget.toPlainText().strip() != "":
                 dernier_champ = widget
                 break
@@ -63,15 +76,11 @@ class Controleur:
         if dernier_champ:
             texte = dernier_champ.toPlainText().strip()
             self.modele.ajouter_produit_emplacement(texte, row, col)
-            self.vue.afficher_popup("Produit placé", f"Produit '{texte}' positionné en ({row}, {col})")
+            self.vue_creation.afficher_popup("Produit placé", f"Produit '{texte}' positionné en ({row}, {col})")
             dernier_champ.clear()
         else:
-            self.vue.afficher_popup("Erreur", "Veuillez d'abord saisir un produit avant de cliquer sur une case.")
+            self.vue_creation.afficher_popup("Erreur", "Veuillez d'abord saisir un produit avant de cliquer sur une case.")
 
     def sauvegarder_donnees(self):
         self.modele.sauvegarder_csv("produits_place.csv")
-        self.vue.afficher_popup("Sauvegarde", "Les produits ont été sauvegardés dans le fichier CSV.")
-
-if __name__ == "__main__":
-    controleur = Controleur()
-    controleur.lancer_application()
+        self.vue_creation.afficher_popup("Sauvegarde", "Les produits ont été sauvegardés dans le fichier CSV.")
