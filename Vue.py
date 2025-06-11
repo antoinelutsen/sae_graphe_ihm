@@ -7,11 +7,12 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal
 
 class VueAccueil(QWidget):
-    mode_selectionne = pyqtSignal(str)  # "creation" ou "utilisation"
+    mode_selectionne = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Sélection du mode")
+        self.setMinimumSize(400, 200)
         self.setup_ui()
 
     def setup_ui(self):
@@ -27,6 +28,7 @@ class VueAccueil(QWidget):
 
         self.btn_creation.clicked.connect(lambda: self.mode_selectionne.emit("creation"))
         self.btn_utilisation.clicked.connect(lambda: self.mode_selectionne.emit("utilisation"))
+
 
 
 class VuePlanUtilisation(QWidget):
