@@ -1,22 +1,26 @@
 import csv, random, unicodedata
 
-def normaliser_texte(texte: str) -> str:
+def normaliser_texte(texte: str) -> str:  # Supprime les accents, met en minuscules et enlève les espaces superflus pour homogénéiser les chaînes
     texte = texte.strip().lower()
     texte = unicodedata.normalize('NFKD', texte)
     return ''.join(c for c in texte if not unicodedata.combining(c))
 
 class ModeleMagasin:
     def __init__(self):
+        # Initialise les structures de données :
+        # - rayons : liste des noms de rayons
+        # - produit_vers_rayon : dictionnaire produit -> rayon
+        # - produits_positionnes : dictionnaire produit -> (rayon, ligne, colonne)
         self.rayons = []
         self.produit_vers_rayon = {}
         self.produits_positionnes = {}
     
-    def set_grille_magasin(self, secteurs, inaccessibles):
+    def set_grille_magasin(self, secteurs, inaccessibles): # Définit la grille du magasin à partir des secteurs (zones valides) et des cases inaccessibles
         self.secteurs = secteurs  # dict[str, set[tuple[int, int]]]
         self.inaccessible_cells = inaccessibles
         self.positions_utilisées = set()
 
-    def charger_csv(self, chemin_csv: str, separateur=';'):
+    def charger_csv(self, chemin_csv: str, separateur=';'): # Charge les produits depuis un fichier CSV au format "colonne = rayon, lignes = produits", remplit le dictionnaire produit -> rayon
         with open(chemin_csv, encoding='utf-8') as fichier:
             lecteur = csv.reader(fichier, delimiter=separateur)
             lignes = list(lecteur)
@@ -32,15 +36,15 @@ class ModeleMagasin:
                             produit_norm = normaliser_texte(produit)
                             self.produit_vers_rayon[produit_norm] = rayon
 
-    def get_rayon(self, produit: str) -> str | None:
+    def get_rayon(self, produit: str) -> str | None: # Retourne le rayon associé à un produit (normalisé) et None s'il n'existe pas
         produit_norm = normaliser_texte(produit)
         return self.produit_vers_rayon.get(produit_norm)
 
-    def get_produits(self, rayon: str) -> list[str]:
+    def get_produits(self, rayon: str) -> list[str]: # Retourne tous les produits d'un rayon
         rayon_norm = normaliser_texte(rayon)
         return [prod for prod, r in self.produit_vers_rayon.items() if normaliser_texte(r) == rayon_norm]
     
-    def ajouter_produit_emplacement(self, produit: str, row: int, col: int):
+    def ajouter_produit_emplacement(self, produit: str, row: int, col: int): # Ajoute / met à jour la position d'un produit avec son rayon
         self.produits_positionnes[produit] = (self.get_rayon(produit), row, col)
 
 
@@ -51,7 +55,7 @@ class ModeleMagasin:
             for produit, (rayon, row, col) in self.produits_positionnes.items():
                 writer.writerow([produit, rayon, row, col])
 
-    def attribuer_position(self, rayon):
+    def attribuer_position(self, rayon): # Choisit une case disponible de manière aléatoire dans un rayon donné, en évitant les cases inaccessibles
         cases_possibles = self.secteurs.get(rayon, set())
         cases_libres = [c for c in cases_possibles if c not in self.inaccessible_cells]
         if not cases_libres:
@@ -60,6 +64,10 @@ class ModeleMagasin:
 
 
     def charger_ou_placer_produits(self, chemin_liste: str, chemin_places: str):
+        # Charge la liste de produits depuis le fichier liste_produits.csv
+        # Tente de récupérer les produits déjà placés depuis produits_place.csv
+        # Si un produit n'est pas encore placé, lui attribue une case disponible
+        # Met à jour la liste interne des produits placés
         produits_rayon = {}
 
         with open(chemin_liste, newline='', encoding='utf-8') as f:
