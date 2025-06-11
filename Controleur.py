@@ -52,7 +52,7 @@ class Controleur:
             self.vue_utilisation.celluleCliquee.connect(self.traiter_clic_utilisation)
             donnees_vue = self.vue_utilisation.get_secteurs_et_cases()
             self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
-            self.modele.charger_et_placer_produits("liste_produits.csv", "produits_place_1.csv")
+            self.modele.charger_ou_placer_produits("liste_produits.csv", "produits_place.csv")
             self.vue_utilisation.show()
 
     def traiter_clic_utilisation(self, row, col):
