@@ -10,12 +10,11 @@ from PyQt6.QtCore import Qt, pyqtSignal
 class VuePlan(QWidget):
     celluleCliquee = pyqtSignal(int, int)
 
-    def __init__(self, image_path: str, scale_percent: int = 100, cell_size: int = 8):
+    def __init__(self, image_path: str, cell_size: int = 8):
         super().__init__()
         self.setWindowTitle("Plan avec interface détaillée")
 
         self.image_path = image_path
-        self.scale_percent = scale_percent
         self.cell_size = cell_size
 
         self.pixmap_original = QPixmap(self.image_path)
@@ -163,6 +162,6 @@ class VuePlan(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = VuePlan("plan.jpg", scale_percent=90, cell_size=8)
+    window = VuePlan("plan.jpg", cell_size=8)
     window.show()
     sys.exit(app.exec())

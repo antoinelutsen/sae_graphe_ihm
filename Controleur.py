@@ -8,7 +8,7 @@ class Controleur:
     def __init__(self):
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
-        self.vue = VuePlan("plan.jpg", scale_percent=95, cell_size=8)
+        self.vue = VuePlan("plan.jpg", cell_size=8)
         self.modele.charger_csv("liste_produits.csv")
         
         self.connecter_signaux()
