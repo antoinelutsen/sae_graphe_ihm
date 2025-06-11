@@ -44,11 +44,13 @@ class Controleur:
                 rayon = self.correspondance_secteurs_rayons.get(secteur)
                 if rayon:
                     produits = self.modele.get_produits(rayon)
-                    print(f"Secteur : {secteur} (Rayon : {rayon})")
-                    print("Produits :", produits)
+                    self.vue.afficher_produits_secteur(secteur, produits, col * self.vue.cell_size, row * self.vue.cell_size)
                 else:
-                    print(f"Aucun rayon associé au secteur : {secteur}")
+                    self.vue.afficher_produits_secteur(secteur, [])
                 break
+        else:
+            self.vue.vider_produits_secteur()
+
 
 
 if __name__ == "__main__":
