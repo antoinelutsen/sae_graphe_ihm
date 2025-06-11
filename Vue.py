@@ -20,8 +20,8 @@ class VuePlan(QWidget):
 
         self.pixmap_original = QPixmap(self.image_path)
         screen = QApplication.primaryScreen().availableGeometry()
-        new_width = int(screen.width() * (self.scale_percent / 100))
-        new_height = int(screen.height() * (self.scale_percent / 100))
+        new_width = 1200
+        new_height = 1000
         self.pixmap_scaled = self.pixmap_original.scaled(
             new_width, new_height, Qt.AspectRatioMode.KeepAspectRatio
         )
@@ -29,7 +29,7 @@ class VuePlan(QWidget):
         main_layout = QHBoxLayout(self)
 
         self.plan_frame = QFrame()
-        self.plan_frame.setFixedSize(self.pixmap_scaled.size())
+        self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
         main_layout.addWidget(self.plan_frame)
 
         right_panel = QVBoxLayout()
