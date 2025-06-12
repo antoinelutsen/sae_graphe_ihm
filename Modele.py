@@ -1,9 +1,33 @@
 import csv, random, unicodedata
+from heapq import heappop, heappush
 
 def normaliser_texte(texte: str) -> str:  # Supprime les accents, met en minuscules et enlève les espaces superflus pour homogénéiser les chaînes
     texte = texte.strip().lower()
     texte = unicodedata.normalize('NFKD', texte)
     return ''.join(c for c in texte if not unicodedata.combining(c))
+
+def dijkstra(start, objectifs, accessibles):
+    objectifs = set(objectifs)
+    file = [(0, start, [])]
+    visites = set()
+
+    while file:
+        cout, position, chemin = heappop(file)
+        if position in visites:
+            continue
+        visites.add(position)
+        chemin = chemin + [position]
+
+        if position in objectifs:
+            return chemin
+
+        x, y = position
+        for dx, dy in [(-1,0), (1,0), (0,-1), (0,1)]:
+            voisin = (x + dx, y + dy)
+            if voisin in accessibles and voisin not in visites:
+                heappush(file, (cout + 1, voisin, chemin))
+
+    return []
 
 class ModeleMagasin:
     def __init__(self):
@@ -14,6 +38,13 @@ class ModeleMagasin:
         self.rayons = []
         self.produit_vers_rayon = {}
         self.produits_positionnes = {}
+        self.toutes_les_cases = None
+        max_col = 1200 // 8  # nombre de colonnes
+        max_row = 1000 // 8  # nombre de lignes
+        self.initialiser_toutes_les_cases(max_row, max_col)
+    
+    def initialiser_toutes_les_cases(self, max_row, max_col):
+        self.toutes_les_cases = set((r, c) for r in range(max_row) for c in range(max_col))
     
     def set_grille_magasin(self, secteurs, inaccessibles): # Définit la grille du magasin à partir des secteurs (zones valides) et des cases inaccessibles
         self.secteurs = secteurs  # dict[str, set[tuple[int, int]]]
@@ -39,6 +70,9 @@ class ModeleMagasin:
     def get_rayon(self, produit: str) -> str | None: # Retourne le rayon associé à un produit (normalisé) et None s'il n'existe pas
         produit_norm = normaliser_texte(produit)
         return self.produit_vers_rayon.get(produit_norm)
+    
+    def get_cases_secteur(self, nom_secteur: str) -> list[tuple[int, int]]:
+        return list(self.secteurs.get(nom_secteur, set()))
 
     def get_produits(self, rayon: str) -> list[str]: # Retourne tous les produits d'un rayon
         rayon_norm = normaliser_texte(rayon)
@@ -140,3 +174,38 @@ class ModeleMagasin:
         self.produits_places = []
         for produit, (rayon, row, col) in produits_deja_places.items():
             self.produits_places.append((produit, rayon, row, col))
+    
+    def construire_chemin_depuis_entree(self, entree: tuple[int, int], produits: list[str]) -> list[tuple[int, int]]:
+        accessibles = self.toutes_les_cases - self.inaccessible_cells
+        accessibles.add(entree)
+
+        etapes = []
+        for nom_produit in produits:
+            position = next(((row, col) for p, _, row, col in self.produits_places if normaliser_texte(p) == normaliser_texte(nom_produit)), None)
+            print(f"Produit recherché: {nom_produit} -> position trouvée: {position}")
+            if position:
+                etapes.append(position)
+
+        sortie_cells = self.secteurs.get("Sortie", set())
+        print("Positions sortie:", sortie_cells)
+        if not sortie_cells:
+            return []
+
+        chemin_total = []
+        position_actuelle = entree
+
+        for cible in etapes:
+            chemin = dijkstra(position_actuelle, [cible], accessibles)
+            print(f"Chemin vers {cible}:", chemin)
+            if not chemin:
+                continue
+            chemin_total.extend(chemin[1:])
+            position_actuelle = cible
+
+        chemin_final = dijkstra(position_actuelle, sortie_cells, accessibles)
+        print("Chemin vers sortie:", chemin_final)
+        if chemin_final:
+            chemin_total.extend(chemin_final[1:])
+
+        print("Chemin total:", chemin_total)
+        return chemin_total

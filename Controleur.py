@@ -36,7 +36,16 @@ class Controleur:
             donnees_vue = self.vue_utilisation.get_secteurs_et_cases()
             self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
             self.modele.charger_ou_placer_produits("liste_produits.csv", "produits_place.csv")
+            self.vue_utilisation.produitsModifies.connect(self.mettre_a_jour_chemin)
+            self.position_entree = (99, 107)
+            self.positions_sortie = self.modele.get_cases_secteur("Sortie")
+            chemin_initial = self.modele.construire_chemin_depuis_entree(self.position_entree, [])
+            self.vue_utilisation.afficher_chemin(chemin_initial)
             self.vue_utilisation.show()
+
+    def on_produits_modifies(self, produits):
+        chemin = self.modele.construire_chemin_depuis_entree(self.position_entree, produits)
+        self.vue_utilisation.afficher_chemin(chemin)
 
     def traiter_clic_utilisation(self, row, col):
         # Lorsqu'une cellule est cliquée en mode utilisation :
@@ -84,3 +93,7 @@ class Controleur:
     def sauvegarder_donnees(self): # Sauvegarde l'état actuel des produits placés dans un fichier CSV
         self.modele.sauvegarder_csv("produits_place.csv")
         self.vue_creation.afficher_popup("Sauvegarde", "Les produits ont été sauvegardés dans le fichier CSV.")
+
+    def mettre_a_jour_chemin(self, liste_produits):
+        chemin = self.modele.construire_chemin_depuis_entree(self.position_entree, liste_produits)
+        self.vue_utilisation.afficher_chemin(chemin)

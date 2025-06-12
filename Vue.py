@@ -31,25 +31,24 @@ class VueAccueil(QWidget):
 
 class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
+    produitsModifies = pyqtSignal(list)
 
-    def __init__(self, image_path: str, cell_size: int = 8):  # Crée un layout vertical pour empiler les éléments graphiques
+    def __init__(self, image_path: str, cell_size: int = 8):
         super().__init__()
         self.setWindowTitle("Mode Utilisation")
 
         self.image_path = image_path
         self.cell_size = cell_size
 
-        self.pixmap_original = QPixmap(self.image_path)
-        screen = QApplication.primaryScreen().availableGeometry()
         new_width = 1200
         new_height = 1000
+        self.pixmap_original = QPixmap(self.image_path)
         self.pixmap_scaled = self.pixmap_original.scaled(
             new_width, new_height, Qt.AspectRatioMode.KeepAspectRatio
         )
 
         main_layout = QHBoxLayout(self)
 
-         # Création du conteneur interactif (le plan) qui peut gérer les événements
         self.plan_frame = QFrame()
         self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
         main_layout.addWidget(self.plan_frame)
@@ -57,7 +56,6 @@ class VuePlanUtilisation(QWidget):
         right_panel = QVBoxLayout()
         main_layout.addLayout(right_panel)
 
-        # Chargement de l'image du plan (peut représenter une carte ou un schéma)
         titre = QLabel("Description")
         titre.setStyleSheet("font-size: 16px; font-weight: bold;")
         texte = QLabel("Bienvenue sur le plan du magasin. Cliquez sur une zone pour voir les produits.")
@@ -66,9 +64,10 @@ class VuePlanUtilisation(QWidget):
         right_panel.addWidget(titre, stretch=0)
         right_panel.addWidget(texte, stretch=1)
 
-        self.zone_liste = QVBoxLayout()
+        self.zone_produits = QVBoxLayout()
+        self.zone_produits.setSpacing(5)
         scroll_content = QWidget()
-        scroll_content.setLayout(self.zone_liste)
+        scroll_content.setLayout(self.zone_produits)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -79,6 +78,7 @@ class VuePlanUtilisation(QWidget):
         self.bouton_ajout.clicked.connect(self.ajouter_champ_produit)
         right_panel.addWidget(self.bouton_ajout, stretch=0)
 
+        self.chemin = []
         self.inaccessible_cells = {
             (5, 10), (7, 12), 
 
@@ -325,7 +325,7 @@ class VuePlanUtilisation(QWidget):
 
     def afficher_info_zone(self, texte: str, x: int, y: int):
         self.info_label.setText(texte)
-        self.info_label.adjustSize()
+        self.info_label.adjustSize()    
         label_width = self.info_label.width()
         label_height = self.info_label.height()
         x = min(x, self.plan_frame.width() - label_width)
@@ -376,6 +376,18 @@ class VuePlanUtilisation(QWidget):
             painter.setBrush(QBrush(sector["color"]))
             for (row, col) in sector["cells"]:
                 painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
+        # Dessiner le chemin si défini
+        if self.chemin:
+            pen_path = QPen(Qt.GlobalColor.black)
+            pen_path.setWidth(4)
+            painter.setPen(pen_path)
+            for i in range(len(self.chemin) - 1):
+                x1 = self.chemin[i][1] * self.cell_size + self.cell_size // 2
+                y1 = self.chemin[i][0] * self.cell_size + self.cell_size // 2
+                x2 = self.chemin[i + 1][1] * self.cell_size + self.cell_size // 2
+                y2 = self.chemin[i + 1][0] * self.cell_size + self.cell_size // 2
+                painter.drawLine(x1, y1, x2, y2)
+        
 
     def mousePressEvent(self, event):
         pos = event.position().toPoint()
@@ -390,6 +402,31 @@ class VuePlanUtilisation(QWidget):
             "sectors": {nom: infos["cells"] for nom, infos in self.sectors.items()},
             "inaccessibles": self.inaccessible_cells
         }
+    
+    def ajouter_champ_produit(self):
+        champ = QTextEdit()
+        champ.setMaximumHeight(30)
+        champ.textChanged.connect(self.notifier_changement_produits)
+        self.zone_produits.addWidget(champ)
+        self.notifier_changement_produits()
+
+
+    def get_produits_saisis(self):
+        return [
+            self.zone_produits.itemAt(i).widget().toPlainText().strip()
+            for i in range(self.zone_produits.count())
+            if self.zone_produits.itemAt(i).widget().toPlainText().strip() != ""
+        ]
+
+    def afficher_chemin(self, chemin):
+        print("Chemin reçu par la vue :", chemin)
+        self.chemin = chemin
+        self.update()
+        
+    def notifier_changement_produits(self):
+        produits = self.get_produits_saisis()
+        self.produitsModifies.emit(produits)
+
 
 class VuePlanCreation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
