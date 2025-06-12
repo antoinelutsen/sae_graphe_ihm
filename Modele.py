@@ -51,10 +51,29 @@ class ModeleMagasin:
 
 
     def sauvegarder_csv(self, chemin: str):
+        donnees_existantes = {}
+
+        try:
+            with open(chemin, newline='', encoding="utf-8") as f:
+                reader = csv.reader(f, delimiter=';')
+                next(reader)
+                for ligne in reader:
+                    if len(ligne) >= 4:
+                        produit = ligne[0].strip().lower()
+                        rayon = ligne[1].strip()
+                        row = int(ligne[2])
+                        col = int(ligne[3])
+                        donnees_existantes[produit] = (rayon, row, col)
+        except FileNotFoundError:
+            pass
+
+        for produit, (rayon, row, col) in self.produits_positionnes.items():
+            donnees_existantes[produit.lower()] = (rayon, row, col)
+
         with open(chemin, "w", newline='', encoding="utf-8") as f:
             writer = csv.writer(f, delimiter=';')
             writer.writerow(["Produit", "Rayon", "Ligne", "Colonne"])
-            for produit, (rayon, row, col) in self.produits_positionnes.items():
+            for produit, (rayon, row, col) in donnees_existantes.items():
                 writer.writerow([produit, rayon, row, col])
 
     def attribuer_position(self, rayon): # Choisit une case disponible de manière aléatoire dans un rayon donné, en évitant les cases inaccessibles
