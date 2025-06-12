@@ -29,12 +29,10 @@ class VueAccueil(QWidget):
         self.btn_creation.clicked.connect(lambda: self.mode_selectionne.emit("creation"))
         self.btn_utilisation.clicked.connect(lambda: self.mode_selectionne.emit("utilisation"))
 
-
-
 class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
 
-    def __init__(self, image_path: str, cell_size: int = 8):
+    def __init__(self, image_path: str, cell_size: int = 8):  # Crée un layout vertical pour empiler les éléments graphiques
         super().__init__()
         self.setWindowTitle("Mode Utilisation")
 
@@ -51,6 +49,7 @@ class VuePlanUtilisation(QWidget):
 
         main_layout = QHBoxLayout(self)
 
+         # Création du conteneur interactif (le plan) qui peut gérer les événements
         self.plan_frame = QFrame()
         self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
         main_layout.addWidget(self.plan_frame)
@@ -58,6 +57,7 @@ class VuePlanUtilisation(QWidget):
         right_panel = QVBoxLayout()
         main_layout.addLayout(right_panel)
 
+        # Chargement de l'image du plan (peut représenter une carte ou un schéma)
         titre = QLabel("Description")
         titre.setStyleSheet("font-size: 16px; font-weight: bold;")
         texte = QLabel("Bienvenue sur le plan du magasin. Cliquez sur une zone pour voir les produits.")
@@ -296,6 +296,7 @@ class VuePlanUtilisation(QWidget):
         extension_vin = {(row, col) for row in range(76, 93) for col in range(18, 22)}  
         self.sectors["Cave a vins"]["cells"] = self.sectors["Cave a vins"]["cells"].union(extension_vin)
 
+         # Zone d'affichage des informations
         self.info_label = QLabel(self.plan_frame)
         self.info_label.setStyleSheet("""
             background-color: rgba(255, 255, 255, 230);
@@ -713,9 +714,19 @@ class VuePlanCreation(QWidget):
                 painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
 
     def mousePressEvent(self, event):
-        pos = event.position().toPoint()
-        col = pos.x() // self.cell_size
-        row = pos.y() // self.cell_size
-        if (row, col) in self.inaccessible_cells:
-            return
-        self.celluleCliquee.emit(row, col)
+        if event.button() == Qt.MouseButton.LeftButton:
+            pos = event.position().toPoint()
+            x = pos.x()
+            y = pos.y()
+            if self.plan_frame.geometry().contains(x, y):
+                rel_x = x - self.plan_frame.x()
+                rel_y = y - self.plan_frame.y()
+                row = int(rel_y / self.cell_size)
+                col = int(rel_x / self.cell_size)
+                self.celluleCliquee.emit(row, col)
+
+                for nom_secteur, data in self.sectors.items():
+                    if (row, col) in data["cells"]:
+                        self.afficher_info_zone(f"Secteur : {nom_secteur}", x, y)
+                        return
+                self.cacher_info_zone()
