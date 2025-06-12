@@ -37,7 +37,7 @@ class Controleur:
             self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
             self.modele.charger_ou_placer_produits("liste_produits.csv", "produits_place.csv")
             self.vue_utilisation.produitsModifies.connect(self.mettre_a_jour_chemin)
-            self.position_entree = (99, 107)
+            self.position_entree = (101, 108)
             self.positions_sortie = self.modele.get_cases_secteur("Sortie")
             chemin_initial = self.modele.construire_chemin_depuis_entree(self.position_entree, [])
             self.vue_utilisation.afficher_chemin(chemin_initial)
@@ -97,3 +97,8 @@ class Controleur:
     def mettre_a_jour_chemin(self, liste_produits):
         chemin = self.modele.construire_chemin_depuis_entree(self.position_entree, liste_produits)
         self.vue_utilisation.afficher_chemin(chemin)
+        self.calculer_distance_marches(chemin)
+
+    def calculer_distance_marches(self, chemin):
+        distance = len(chemin) // 5
+        self.vue_utilisation.afficher_distance(distance)

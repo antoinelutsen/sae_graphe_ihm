@@ -61,8 +61,12 @@ class VuePlanUtilisation(QWidget):
         texte = QLabel("Bienvenue sur le plan du magasin. Cliquez sur une zone pour voir les produits.")
         texte.setWordWrap(True)
         texte.setMaximumHeight(100)
+        self.label_distance = QLabel("Distance: 0 m")
+        self.label_distance.setStyleSheet("font-size: 16px; font-weight: bold;")
         right_panel.addWidget(titre, stretch=0)
         right_panel.addWidget(texte, stretch=1)
+        right_panel.addWidget(self.label_distance)
+
 
         self.zone_produits = QVBoxLayout()
         self.zone_produits.setSpacing(5)
@@ -426,6 +430,9 @@ class VuePlanUtilisation(QWidget):
     def notifier_changement_produits(self):
         produits = self.get_produits_saisis()
         self.produitsModifies.emit(produits)
+
+    def afficher_distance(self, distance):
+        self.label_distance.setText(f"Distance: {distance} m")
 
 
 class VuePlanCreation(QWidget):
