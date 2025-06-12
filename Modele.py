@@ -44,8 +44,10 @@ class ModeleMagasin:
         rayon_norm = normaliser_texte(rayon)
         return [prod for prod, r in self.produit_vers_rayon.items() if normaliser_texte(r) == rayon_norm]
     
-    def ajouter_produit_emplacement(self, produit: str, row: int, col: int): # Ajoute / met à jour la position d'un produit avec son rayon
-        self.produits_positionnes[produit] = (self.get_rayon(produit), row, col)
+    def ajouter_produit_emplacement(self, produit: str, row: int, col: int, rayon: str): # Ajoute / met à jour la position d'un produit avec son rayon
+        if rayon is None:
+            rayon = self.get_rayon(produit)
+        self.produits_positionnes[produit] = (rayon, row, col)
 
 
     def sauvegarder_csv(self, chemin: str):

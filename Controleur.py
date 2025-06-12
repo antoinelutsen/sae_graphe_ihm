@@ -11,24 +11,6 @@ class Controleur:
         self.modele = ModeleMagasin()
         self.modele.charger_csv("liste_produits.csv")
  
-        self.correspondance_secteurs_rayons = {
-            "Charcuterie": "Viandes",
-            "Fruits": "Fruits",
-            "Légumes": "Légumes",
-            "Poissonnerie": "Poissons",
-            "Produits frais": "Rayon frais",
-            "Produits sucrés": "Épicerie sucrée",
-            "Petit déj": "Petit déjeuner",
-            "Crémerie": "Crèmerie",
-            "Épicerie": "Épicerie",
-            "Conserves": "Conserves",
-            "Apéro": "Apéritifs",
-            "Boissons": "Boissons",
-            "Maison": "Articles Maison",
-            "Hygiène": "Hygiène",
-            "Bureau": "Bureau",
-            "Animaux": "Animaux"
-        }
         self.vue_accueil = VueAccueil()
         self.vue_accueil.mode_selectionne.connect(self.changer_mode)
 
@@ -63,12 +45,10 @@ class Controleur:
         # - affiche les produits dans une infobulle ou vide l'affichage si aucun secteur
         for secteur, infos in self.vue_utilisation.sectors.items():
             if (row, col) in infos["cells"]:
-                rayon = self.correspondance_secteurs_rayons.get(secteur)
-                if rayon:
-                    produits = self.modele.get_produits(rayon)
-                    self.vue_utilisation.afficher_produits_secteur(secteur, produits, col * self.vue_utilisation.cell_size, row * self.vue_utilisation.cell_size)
-                else:
-                    self.vue_utilisation.afficher_produits_secteur(secteur, [])
+                produits = self.modele.get_produits(secteur)
+                self.vue_utilisation.afficher_produits_secteur(
+                    secteur, produits, col * self.vue_utilisation.cell_size, row * self.vue_utilisation.cell_size
+                )
                 break
         else:
             self.vue_utilisation.vider_produits_secteur()
@@ -79,7 +59,7 @@ class Controleur:
         # - place le produit dans la grille via le modèle
         # - vide le champ après placement ou affiche une erreur si aucun produit saisi
         dernier_champ = None
-        for i in range(self.vue_creation.zone_produits.count()-1, -1, -1):
+        for i in range(self.vue_creation.zone_produits.count() - 1, -1, -1):
             widget = self.vue_creation.zone_produits.itemAt(i).widget()
             if widget.toPlainText().strip() != "":
                 dernier_champ = widget
@@ -87,8 +67,16 @@ class Controleur:
 
         if dernier_champ:
             texte = dernier_champ.toPlainText().strip()
-            self.modele.ajouter_produit_emplacement(texte, row, col)
-            self.vue_creation.afficher_popup("Produit placé", f"Produit '{texte}' positionné en ({row}, {col})")
+            secteur_courant = None
+            for secteur, infos in self.vue_creation.sectors.items():
+                if (row, col) in infos["cells"]:
+                    secteur_courant = secteur
+                    break
+
+            rayon = secteur_courant if secteur_courant is not None else "Inconnu"
+
+            self.modele.ajouter_produit_emplacement(texte, row, col, rayon)
+            self.vue_creation.afficher_popup("Produit placé", f"Produit '{texte}' positionné en ({row}, {col}) dans secteur {rayon}")
             dernier_champ.clear()
         else:
             self.vue_creation.afficher_popup("Erreur", "Veuillez d'abord saisir un produit avant de cliquer sur une case.")

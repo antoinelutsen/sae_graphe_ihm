@@ -678,9 +678,6 @@ class VuePlanCreation(QWidget):
             cursor = champ.textCursor()
             cursor.setPosition(100)
             champ.setTextCursor(cursor)
-    
-    def cacher_info_zone(self):
-        self.info_label.setVisible(False)
 
     def afficher_popup(self, titre, message):
         msg = QMessageBox()
@@ -725,8 +722,17 @@ class VuePlanCreation(QWidget):
                 col = int(rel_x / self.cell_size)
                 self.celluleCliquee.emit(row, col)
 
-                for nom_secteur, data in self.sectors.items():
-                    if (row, col) in data["cells"]:
-                        self.afficher_info_zone(f"Secteur : {nom_secteur}", x, y)
-                        return
-                self.cacher_info_zone()
+    def get_secteurs_et_cases(self):
+        return {
+            "sectors": {nom: infos["cells"] for nom, infos in self.sectors.items()},
+            "inaccessibles": self.inaccessible_cells
+        }
+    
+    def get_nom_secteur(self, row, col):
+        """
+        Return the name of the sector corresponding to the given (row, col), or None if not found.
+        """
+        for nom, cellules in self.get_secteurs_et_cases()["sectors"].items():
+            if (row, col) in cellules:
+                return nom
+        return None
