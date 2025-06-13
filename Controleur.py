@@ -11,7 +11,7 @@ class Controleur:
     def __init__(self):
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
-        self.modele.charger_csv("liste_produits.csv")
+        self.modele.charger_csv("produits_place.csv")
         self.modele.charger_descriptif("description.json") 
  
         self.vue_accueil = VueAccueil()

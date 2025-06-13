@@ -59,21 +59,17 @@ class ModeleMagasin:
     def get_descriptif(self) -> dict:
         return self.descriptif
 
-    def charger_csv(self, chemin_csv: str, separateur=';'): # Charge les produits depuis un fichier CSV au format "colonne = rayon, lignes = produits", remplit le dictionnaire produit -> rayon
+    def charger_csv(self, chemin_csv: str, separateur=';'):
         with open(chemin_csv, encoding='utf-8') as fichier:
-            lecteur = csv.reader(fichier, delimiter=separateur)
-            lignes = list(lecteur)
-            if not lignes:
-                return
-            self.rayons = [r.strip() for r in lignes[0]]
-            for col_index, rayon in enumerate(self.rayons):
-                rayon_norm = normaliser_texte(rayon)
-                for ligne in lignes[1:]:
-                    if col_index < len(ligne):
-                        produit = ligne[col_index].strip()
-                        if produit:
-                            produit_norm = normaliser_texte(produit)
-                            self.produit_vers_rayon[produit_norm] = rayon
+            lecteur = csv.DictReader(fichier, delimiter=separateur)
+            for ligne in lecteur:
+                produit = ligne["Produit"].strip()
+                rayon = ligne["Rayon"].strip()
+                row = int(ligne["Ligne"])
+                col = int(ligne["Colonne"])
+                if produit and rayon:
+                    produit_norm = normaliser_texte(produit)
+                    self.produit_vers_rayon[produit_norm] = rayon
 
     def get_rayon(self, produit: str) -> str | None: # Retourne le rayon associé à un produit (normalisé) et None s'il n'existe pas
         produit_norm = normaliser_texte(produit)
