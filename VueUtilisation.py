@@ -42,7 +42,6 @@ class VuePlanUtilisation(QWidget):
         self.label_distance = QLabel("Distance: 0 m")
         self.label_distance.setStyleSheet("font-size: 16px; font-weight: bold;")
         
-        # Add widgets to right_panel
         self.right_panel.addWidget(titre, stretch=0)
         self.right_panel.addWidget(texte, stretch=1)
         self.right_panel.addWidget(self.label_distance)
