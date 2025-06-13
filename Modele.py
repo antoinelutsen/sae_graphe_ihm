@@ -1,4 +1,4 @@
-import csv, random, unicodedata
+import csv, random, unicodedata, json
 from heapq import heappop, heappush
 
 def normaliser_texte(texte: str) -> str:  # Supprime les accents, met en minuscules et enlève les espaces superflus pour homogénéiser les chaînes
@@ -38,6 +38,7 @@ class ModeleMagasin:
         self.rayons = []
         self.produit_vers_rayon = {}
         self.produits_positionnes = {}
+        self.descriptif = {}
         self.toutes_les_cases = None
         max_col = 1200 // 8  # nombre de colonnes
         max_row = 1000 // 8  # nombre de lignes
@@ -50,6 +51,13 @@ class ModeleMagasin:
         self.secteurs = secteurs  # dict[str, set[tuple[int, int]]]
         self.inaccessible_cells = inaccessibles
         self.positions_utilisées = set()
+
+    def charger_descriptif(self, chemin: str):
+        with open(chemin, encoding='utf-8') as f:
+            self.descriptif = json.load(f)
+
+    def get_descriptif(self) -> dict:
+        return self.descriptif
 
     def charger_csv(self, chemin_csv: str, separateur=';'): # Charge les produits depuis un fichier CSV au format "colonne = rayon, lignes = produits", remplit le dictionnaire produit -> rayon
         with open(chemin_csv, encoding='utf-8') as fichier:

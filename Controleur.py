@@ -1,7 +1,9 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QInputDialog, QMessageBox, QLineEdit
 from Modele import ModeleMagasin
-from Vue import *
+from VueCreation import VuePlanCreation
+from VueAccueil import VueAccueil
+from VueUtilisation import VuePlanUtilisation
 
 # Classe principale : orchestre l'interaction entre la vue et le modèle
 class Controleur:
@@ -10,6 +12,7 @@ class Controleur:
         self.app = QApplication(sys.argv)
         self.modele = ModeleMagasin()
         self.modele.charger_csv("liste_produits.csv")
+        self.modele.charger_descriptif("description.json") 
  
         self.vue_accueil = VueAccueil()
         self.vue_accueil.mode_selectionne.connect(self.changer_mode)
@@ -26,6 +29,9 @@ class Controleur:
                 self.vue_creation = VuePlanCreation("plan.jpg", cell_size=8)
                 self.vue_creation.celluleCliquee.connect(self.traiter_clic_creation)
                 self.vue_creation.bouton_sauvegarder.clicked.connect(self.sauvegarder_donnees)
+                descriptif = self.modele.get_descriptif()
+                self.vue_creation.mettre_a_jour_descriptif(descriptif)
+                self.vue_creation.bouton_info.clicked.connect(lambda : self.afficher_info_plan_creation(descriptif))
                 self.vue_creation.show()
             else:
                 QMessageBox.warning(None, "Erreur", "Mot de passe incorrect")
@@ -41,6 +47,9 @@ class Controleur:
             self.positions_sortie = self.modele.get_cases_secteur("Sortie")
             chemin_initial = self.modele.construire_chemin_depuis_entree(self.position_entree, [])
             self.vue_utilisation.afficher_chemin(chemin_initial)
+            descriptif = self.modele.get_descriptif()
+            self.vue_utilisation.mettre_a_jour_descriptif(descriptif)
+            self.vue_utilisation.bouton_info.clicked.connect(lambda : self.afficher_info_plan_utilisation(descriptif))
             self.vue_utilisation.show()
 
     def on_produits_modifies(self, produits):
@@ -102,3 +111,11 @@ class Controleur:
     def calculer_distance_marches(self, chemin):
         distance = len(chemin) // 5
         self.vue_utilisation.afficher_distance(distance)
+
+    def afficher_info_plan_utilisation(self, _=None):
+        descriptif = self.modele.get_descriptif()
+        self.vue_utilisation.afficher_info_zone_plan(descriptif)
+
+    def afficher_info_plan_creation(self, _=None):
+        descriptif = self.modele.get_descriptif()
+        self.vue_creation.afficher_info_zone_plan(descriptif)
