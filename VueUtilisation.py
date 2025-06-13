@@ -31,11 +31,9 @@ class VuePlanUtilisation(QWidget):
         self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
         main_layout.addWidget(self.plan_frame)
 
-        # Create right panel first
         self.right_panel = QVBoxLayout()
         main_layout.addLayout(self.right_panel)
-
-        # Now create widgets that will go in right_panel
+        
         titre = QLabel("Description")
         titre.setStyleSheet("font-size: 16px; font-weight: bold;")
         texte = QLabel("Bienvenue sur le plan du magasin.")
@@ -49,7 +47,6 @@ class VuePlanUtilisation(QWidget):
         self.right_panel.addWidget(texte, stretch=1)
         self.right_panel.addWidget(self.label_distance)
 
-        # Continue with the rest of your initialization...
         self.zone_info = QLabel()
         self.zone_info.setWordWrap(True)
         self.zone_info.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
