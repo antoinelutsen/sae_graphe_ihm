@@ -7,7 +7,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal
 
 
-class VuePlanCreation(QWidget):
+class VuePlanCreation(QWidget): # Interface graphique du mode Création
     celluleCliquee = pyqtSignal(int, int)
     champsDescriptifModifies = pyqtSignal(dict)
 
@@ -18,6 +18,7 @@ class VuePlanCreation(QWidget):
         self.image_path = image_path
         self.cell_size = cell_size
 
+        # Chargement et redimensionnement de l'image de fond
         self.pixmap_original = QPixmap(self.image_path)
         new_width = 1200
         new_height = 1000
@@ -48,6 +49,7 @@ class VuePlanCreation(QWidget):
         self.zone_info.setStyleSheet("background-color: #f0f0f0; border: 1px solid gray; padding: 5px;")
         right_panel.addWidget(self.zone_info)
 
+        # Bouton pour afficher la zone d'informations
         self.bouton_info = QPushButton("i")
         self.bouton_info.setFixedWidth(25)
         self.bouton_info.clicked.connect(self.afficher_info_zone_plan)
@@ -362,7 +364,7 @@ class VuePlanCreation(QWidget):
 
         self.show()
 
-    def ajouter_champ_produit(self):
+    def ajouter_champ_produit(self): # Ajoute un champ de texte pour saisir un produit
         if self.dernier_champ is not None:
             self.dernier_champ.setDisabled(False)
         champ = QTextEdit()
@@ -371,7 +373,7 @@ class VuePlanCreation(QWidget):
         self.zone_produits.addWidget(champ)
         self.dernier_champ = champ
 
-    def limiter_texte(self, champ):
+    def limiter_texte(self, champ): # Limite le texte à 100 caractères max
         texte = champ.toPlainText()
         if len(texte) > 100:
             champ.setPlainText(texte[:100])
@@ -379,13 +381,13 @@ class VuePlanCreation(QWidget):
             cursor.setPosition(100)
             champ.setTextCursor(cursor)
 
-    def afficher_popup(self, titre, message):
+    def afficher_popup(self, titre, message): # Affiche un message d'alerte
         msg = QMessageBox()
         msg.setWindowTitle(titre)
         msg.setText(message)
         msg.exec()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event): # Dessin de la grille, des zones inaccessibles et des secteurs colorés
         painter = QPainter(self)
         painter.drawPixmap(0, 0, self.pixmap_scaled)
 
@@ -410,7 +412,7 @@ class VuePlanCreation(QWidget):
             for (row, col) in sector["cells"]:
                 painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
 
-    def mousePressEvent(self, event):
+    def mousePressEvent(self, event): # Capture des clics de souris sur le plan
         if event.button() == Qt.MouseButton.LeftButton:
             pos = event.position().toPoint()
             x = pos.x()
@@ -424,13 +426,13 @@ class VuePlanCreation(QWidget):
                     return
                 self.celluleCliquee.emit(row, col)
 
-    def get_secteurs_et_cases(self):
+    def get_secteurs_et_cases(self): # Retourne les secteurs et cellules inaccessibles
         return {
             "sectors": {nom: infos["cells"] for nom, infos in self.sectors.items()},
             "inaccessibles": self.inaccessible_cells
         }
     
-    def get_nom_secteur(self, row, col):
+    def get_nom_secteur(self, row, col): # Donne le nom du secteur pour une cellule
         """
         Return the name of the sector corresponding to the given (row, col), or None if not found.
         """
@@ -439,14 +441,14 @@ class VuePlanCreation(QWidget):
                 return nom
         return None
     
-    def toggle_info_zone(self):
+    def toggle_info_zone(self): # Affiche ou masque la zone d'information
         if self.zone_info.isVisible():
             self.zone_info.setVisible(False)
         else:
             self.afficher_info_zone_plan(self.descriptif_plan)
             self.zone_info.setVisible(True)
 
-    def afficher_info_zone_plan(self, descriptif):
+    def afficher_info_zone_plan(self, descriptif): # Affiche les champs d'information sur une zone donnée
         while self.zone_info_layout.count():
             item = self.zone_info_layout.takeAt(0)
             widget = item.widget()
@@ -467,10 +469,10 @@ class VuePlanCreation(QWidget):
 
 
 
-    def mettre_a_jour_descriptif(self, descriptif: dict):
+    def mettre_a_jour_descriptif(self, descriptif: dict): # Met à jour le descriptif du plan
         self.descriptif_plan = descriptif
 
-    def gerer_modification_descriptif(self):
+    def gerer_modification_descriptif(self): # Gère les modifications du descriptif via les champs de texte
         nouveau_descriptif = {
             cle: champ.toPlainText() for cle, champ in self.champs_edits.items()
         }
