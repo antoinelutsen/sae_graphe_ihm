@@ -190,12 +190,10 @@ class ModeleMagasin:
         etapes = []
         for nom_produit in produits:
             position = next(((row, col) for p, _, row, col in self.produits_places if normaliser_texte(p) == normaliser_texte(nom_produit)), None)
-            print(f"Produit recherché: {nom_produit} -> position trouvée: {position}")
             if position:
                 etapes.append(position)
 
         sortie_cells = self.secteurs.get("Sortie", set())
-        print("Positions sortie:", sortie_cells)
         if not sortie_cells:
             return []
 
@@ -204,18 +202,15 @@ class ModeleMagasin:
 
         for cible in etapes:
             chemin = dijkstra(position_actuelle, [cible], accessibles)
-            print(f"Chemin vers {cible}:", chemin)
             if not chemin:
                 continue
             chemin_total.extend(chemin[1:])
             position_actuelle = cible
 
         chemin_final = dijkstra(position_actuelle, sortie_cells, accessibles)
-        print("Chemin vers sortie:", chemin_final)
         if chemin_final:
             chemin_total.extend(chemin_final[1:])
 
-        print("Chemin total:", chemin_total)
         return chemin_total
     
     def set_descriptif(self, descriptif):
