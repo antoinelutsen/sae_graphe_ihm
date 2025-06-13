@@ -1,10 +1,11 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QTextEdit, QScrollArea, QFrame, QMessageBox
+    QTextEdit, QScrollArea, QFrame, QMessageBox, QFileDialog 
 )
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
+from PyQt6.QtWidgets import QFileDialog
 
 class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
@@ -30,9 +31,11 @@ class VuePlanUtilisation(QWidget):
         self.plan_frame.setMinimumSize(self.pixmap_scaled.size())
         main_layout.addWidget(self.plan_frame)
 
-        right_panel = QVBoxLayout()
-        main_layout.addLayout(right_panel)
+        # Create right panel first
+        self.right_panel = QVBoxLayout()
+        main_layout.addLayout(self.right_panel)
 
+        # Now create widgets that will go in right_panel
         titre = QLabel("Description")
         titre.setStyleSheet("font-size: 16px; font-weight: bold;")
         texte = QLabel("Bienvenue sur le plan du magasin.")
@@ -40,26 +43,24 @@ class VuePlanUtilisation(QWidget):
         texte.setMaximumHeight(100)
         self.label_distance = QLabel("Distance: 0 m")
         self.label_distance.setStyleSheet("font-size: 16px; font-weight: bold;")
-        right_panel.addWidget(titre, stretch=0)
-        right_panel.addWidget(texte, stretch=1)
-        right_panel.addWidget(self.label_distance)
+        
+        # Add widgets to right_panel
+        self.right_panel.addWidget(titre, stretch=0)
+        self.right_panel.addWidget(texte, stretch=1)
+        self.right_panel.addWidget(self.label_distance)
 
-        # Après création bouton_info
+        # Continue with the rest of your initialization...
         self.zone_info = QLabel()
         self.zone_info.setWordWrap(True)
         self.zone_info.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         self.zone_info.setStyleSheet("background-color: #f0f0f0; border: 1px solid gray; padding: 5px;")
         self.zone_info.setVisible(False)
-        right_panel.addWidget(self.zone_info)
-
-        
+        self.right_panel.addWidget(self.zone_info)
 
         self.bouton_info = QPushButton("i")
         self.bouton_info.setFixedWidth(25)
-        self.bouton_info.clicked.connect(self.afficher_info_zone_plan)
-        self.bouton_info.clicked.disconnect()
         self.bouton_info.clicked.connect(self.toggle_info_zone)
-        right_panel.addWidget(self.bouton_info)
+        self.right_panel.addWidget(self.bouton_info)
 
         self.zone_produits = QVBoxLayout()
         self.zone_produits.setSpacing(5)
@@ -69,11 +70,17 @@ class VuePlanUtilisation(QWidget):
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
         scroll_area.setWidget(scroll_content)
-        right_panel.addWidget(scroll_area, stretch=4)
+        self.right_panel.addWidget(scroll_area, stretch=4)
 
         self.bouton_ajout = QPushButton("+ Ajouter un produit")
         self.bouton_ajout.clicked.connect(self.ajouter_champ_produit)
-        right_panel.addWidget(self.bouton_ajout, stretch=0)
+        self.right_panel.addWidget(self.bouton_ajout, stretch=0)
+
+        self.bouton_charger = QPushButton("Charger liste de courses")
+        self.bouton_charger.clicked.connect(self.charger_liste_courses)
+        self.right_panel.addWidget(self.bouton_charger, stretch=0)
+        
+        self.descriptif_plan = {}
 
         self.descriptif_plan = {}
         self.timer_chemin = QTimer()
@@ -483,3 +490,76 @@ class VuePlanUtilisation(QWidget):
 
     def mettre_a_jour_descriptif(self, descriptif: dict):
         self.descriptif_plan = descriptif
+
+    def charger_liste_courses(self):
+        """Ouvre une boîte de dialogue pour sélectionner un fichier texte contenant la liste de courses"""
+        # Options pour la boîte de dialogue (0 signifie aucune option spécifique)
+        options = QFileDialog.Option(0)
+        
+        # Ouvre le dialogue de sélection de fichier
+        fichier, _ = QFileDialog.getOpenFileName(
+            self,
+            "Sélectionner une liste de courses",  # Titre de la fenêtre
+            "",  # Dossier de départ (vide = dossier par défaut)
+            "Fichiers Texte (*.txt);;Tous les fichiers (*)",  # Filtres de fichiers
+            options=options
+        )
+        
+        # Si un fichier a été sélectionné
+        if fichier:
+            try:
+                # Lecture du fichier
+                with open(fichier, 'r', encoding='utf-8') as f:
+                    produits = [ligne.strip() for ligne in f if ligne.strip()]
+                
+                # Suppression des champs existants
+                self._vider_zone_produits()
+                
+                # Ajout des nouveaux produits
+                for produit in produits:
+                    self._ajouter_produit(produit)
+                
+                # Notification du changement
+                self.notifier_changement_produits()
+                
+                # Message de confirmation
+                QMessageBox.information(
+                    self,
+                    "Chargement réussi",
+                    f"La liste a été chargée depuis:\n{fichier}",
+                    QMessageBox.StandardButton.Ok
+                )
+                
+            except UnicodeDecodeError:
+                QMessageBox.critical(
+                    self,
+                    "Erreur d'encodage",
+                    "Le fichier n'est pas encodé en UTF-8.",
+                    QMessageBox.StandardButton.Ok
+                )
+            except Exception as e:
+                QMessageBox.critical(
+                    self,
+                    "Erreur",
+                    f"Impossible de charger le fichier:\n{str(e)}",
+                    QMessageBox.StandardButton.Ok
+                )
+
+    def _vider_zone_produits(self):
+        """Vide la zone des produits existants"""
+        while self.zone_produits.count():
+            item = self.zone_produits.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+
+    def _ajouter_produit(self, texte_produit):
+        """Ajoute un champ produit avec le texte spécifié"""
+        champ = QTextEdit()
+        champ.setMaximumHeight(30)
+        champ.setPlainText(texte_produit)
+        champ.textChanged.connect(self.notifier_changement_produits)
+        self.zone_produits.addWidget(champ)
+
+    def notifier_changement_produits(self):
+        produits = self.get_produits_saisis()
+        self.produitsModifies.emit(produits)
