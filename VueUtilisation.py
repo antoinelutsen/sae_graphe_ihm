@@ -235,7 +235,7 @@ class VuePlanUtilisation(QWidget):
         "Eaux": {
             "cells": {(row, col) for row in range(54, 93) for col in range(9, 13)}
         },
-        "Cave a vins": {
+        "Cave a Vins": {
             "cells": {(row, col) for row in range(54, 76) for col in range(13, 29)}
         },
         "Textile": {
@@ -271,7 +271,7 @@ class VuePlanUtilisation(QWidget):
         "Alcools": {
             "cells": {(row, col) for row in range(76, 93) for col in range(13, 18)}
         },
-        "Lait + oeufs": {
+        "Lait + Oeufs": {
             "cells": {(row, col) for row in range(24, 53) for col in range(18, 24)}
         },
         "Saucissons": {
@@ -286,7 +286,7 @@ class VuePlanUtilisation(QWidget):
         "Boucherie": {
             "cells": {(row, col) for row in range(1, 6) for col in range(54, 83)}
         },
-        "Boucherie trad": {
+        "Boucherie Trad": {
             "cells": {(row, col) for row in range(4, 10) for col in range(84, 101)}
         },
         "Rotisserie": {
@@ -298,7 +298,7 @@ class VuePlanUtilisation(QWidget):
         "Lessives": {
             "cells": {(row, col) for row in range(11, 39) for col in range(142, 147)}
         },
-        "Patisserie industrielle / Pain": {
+        "Patisserie Industrielle / Pain": {
             "cells": {(row, col) for row in range(11, 53) for col in range(67, 71)}
         },
         "Univers Animaux": {
@@ -334,7 +334,7 @@ class VuePlanUtilisation(QWidget):
         self.sectors["Epicerie"]["cells"] = self.sectors["Epicerie"]["cells"].union(extension_epicerie)
 
         extension_vin = {(row, col) for row in range(76, 93) for col in range(18, 22)}  
-        self.sectors["Cave a vins"]["cells"] = self.sectors["Cave a vins"]["cells"].union(extension_vin)
+        self.sectors["Cave a Vins"]["cells"] = self.sectors["Cave a Vins"]["cells"].union(extension_vin)
 
          # Zone d'affichage des informations
         self.info_label = QLabel(self.plan_frame)

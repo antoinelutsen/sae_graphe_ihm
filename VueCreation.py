@@ -230,7 +230,7 @@ class VuePlanCreation(QWidget):
             "color": QColor(135, 206, 235, 120),
             "cells": {(row, col) for row in range(54, 93) for col in range(9, 13)}
         },
-        "Cave a vins": {
+        "Cave a Vins": {
             "color": QColor(199, 21, 133, 120),
             "cells": {(row, col) for row in range(54, 76) for col in range(13, 29)}
         },
@@ -278,7 +278,7 @@ class VuePlanCreation(QWidget):
             "color": QColor(255, 0, 0, 120),  # rouge
             "cells": {(row, col) for row in range(76, 93) for col in range(13, 18)}
         },
-        "Lait + oeufs": {
+        "Lait + Oeufs": {
             "color": QColor(0, 191, 255, 120),  # bleu (deep sky blue)
             "cells": {(row, col) for row in range(24, 53) for col in range(18, 24)}
         },
@@ -298,7 +298,7 @@ class VuePlanCreation(QWidget):
             "color": QColor(220, 20, 60, 120),  # rouge (crimson)
             "cells": {(row, col) for row in range(1, 6) for col in range(54, 83)}
         },
-        "Boucherie trad": {
+        "Boucherie Trad": {
             "color": QColor(178, 34, 34, 120),  # rouge (firebrick)
             "cells": {(row, col) for row in range(4, 10) for col in range(84, 101)}
         },
@@ -314,7 +314,7 @@ class VuePlanCreation(QWidget):
             "color": QColor(148, 0, 211, 120),  # violet (dark violet)
             "cells": {(row, col) for row in range(11, 39) for col in range(142, 147)}
         },
-        "Patisserie industrielle / Pain": {
+        "Patisserie Industrielle / Pain": {
             "color": QColor(255, 140, 0, 120),  # orange (dark orange)
             "cells": {(row, col) for row in range(11, 53) for col in range(67, 71)}
         },
@@ -355,7 +355,7 @@ class VuePlanCreation(QWidget):
         self.sectors["Epicerie"]["cells"] = self.sectors["Epicerie"]["cells"].union(extension_epicerie)
 
         extension_vin = {(row, col) for row in range(76, 93) for col in range(18, 22)}  
-        self.sectors["Cave a vins"]["cells"] = self.sectors["Cave a vins"]["cells"].union(extension_vin)
+        self.sectors["Cave a Vins"]["cells"] = self.sectors["Cave a Vins"]["cells"].union(extension_vin)
 
         self.dernier_champ = None
         self.ajouter_champ_produit()
