@@ -1,54 +1,389 @@
 Produit;Rayon;Ligne;Colonne
-Pommes;Fruits et Legumes;49;38
-Bananes;Fruits et Legumes;19;36
-Carottes;Fruits et Legumes;32;48
-Salades;Fruits et Legumes;49;34
-Tomates;Fruits et Legumes;47;33
-Pommes de terre;Fruits et Legumes;47;36
-Concombres;Fruits et Legumes;29;35
-Poivrons;Fruits et Legumes;39;41
-Courgettes;Fruits et Legumes;31;41
-Oignons;Fruits et Legumes;37;48
-Ail;Fruits et Legumes;21;40
-Poires;Fruits et Legumes;43;45
-Melons;Fruits et Legumes;36;39
-Jambon blanc;Charcuterie LS;38;30
-Jambon cru;Charcuterie LS;36;28
-Rosette;Charcuterie LS;45;29
-Saumon frais;Poissonnerie;6;1
-Cabillaud;Poissonnerie;8;14
-Crevettes;Poissonnerie;6;3
-Camembert;Fromage Trad;8;20
-Comte;Fromage Trad;2;28
-Roquefort;Fromage Trad;4;21
-Pizza surgelee;Surgeles;50;61
-Haricots verts;Surgeles;40;57
-Pates;Epicerie;78;49
-Riz;Epicerie;60;55
-Farine;Epicerie;58;44
-Eau minerale;Eaux;88;9
-Vin rouge;Cave a vins;64;26
-T-shirts;Textile;60;77
-Piles;Bazar;32;122
-Lessive;Entretien;18;137
-Barbecue;Saisonnier;34;102
-Parfum femme;Parfumerie;33;100
-Baguette;Pain / Patisserie;14;115
-Jus d orange;Jus de fruits;95;21
-Yaourts nature;Ultra Frais;32;6
-Bière blonde;Bieres;96;4
-Whisky;Alcools;82;13
-Lait demi-ecreme;Lait + oeufs;48;21
-Saucisson sec;Saucissons;18;21
-Chipolatas;Saucisserie;11;25
-Cuisse de poulet;Volailles;5;43
-Steak hache;Boucherie;1;64
-Entrecôte;Boucherie trad;5;86
-Poulet rôti;Rotisserie;5;119
-Lessive liquide;Lessives;25;144
-Madeleines;Patisserie industrielle / Pain;29;69
-Croquettes chien;Univers Animaux;21;72
-Couches;Univers Bebe;18;85
-Brie;Fromage;32;14
-Reblochon;Fromage;48;17
-Mimolette;Fromage;30;15
+pommes;Fruits et Legumes;20;45
+bananes;Fruits et Legumes;35;47
+carottes;Fruits et Legumes;44;35
+salades;Fruits et Legumes;28;37
+tomates;Fruits et Legumes;47;45
+pommes de terre;Fruits et Legumes;15;45
+concombres;Fruits et Legumes;18;36
+poivrons;Fruits et Legumes;14;36
+courgettes;Fruits et Legumes;16;45
+oignons;Fruits et Legumes;12;45
+ail;Fruits et Legumes;34;38
+poires;Fruits et Legumes;42;45
+melons;Fruits et Legumes;16;45
+jambon blanc;Charcuterie LS;33;26
+jambon cru;Charcuterie LS;49;26
+rosette;Saucissons;17;19
+saumon frais;Poissonnerie;2;0
+cabillaud;Poissonnerie;8;11
+crevettes;Poissonnerie;5;13
+camembert;Fromage;14;15
+comte;Fromage;27;16
+roquefort;Fromage;28;16
+pizza surgelee;Surgeles;50;61
+haricots verts;Surgeles;21;55
+pates;Epicerie;59;53
+riz;Epicerie;57;46
+farine;Epicerie;73;52
+eau minerale;Eaux;88;9
+vin rouge;Cave a Vins;54;13
+t-shirts;Textile;60;77
+piles;Bazar;75;136
+lessive;Entretien;24;114
+barbecue;Saisonnier;60;130
+parfum femme;Parfumerie;30;95
+baguette;Pain / Patisserie;11;127
+jus d orange;Jus de fruits;95;21
+yaourts nature;Ultra Frais;36;6
+bière blonde;Bieres;72;0
+whisky;Alcools;85;16
+lait demi-ecreme;Lait + Oeufs;29;19
+saucisson sec;Saucissons;21;19
+chipolatas;Saucisserie;29;26
+cuisse de poulet;Volailles;5;36
+steak hache;Boucherie;5;61
+entrecôte;Boucherie;5;74
+poulet rôti;Rotisserie;8;111
+lessive liquide;Lessives;15;142
+madeleines;Patisserie Industrielle / Pain;24;67
+croquettes chien;Univers Animaux;22;74
+couches;Univers Bebe;26;82
+brie;Fromage;21;16
+reblochon;Fromage;30;16
+mimolette;Fromage;48;16
+pastèques;Fruits et Legumes;37;47
+raisins;Fruits et Legumes;13;45
+kiwi;Fruits et Legumes;30;40
+avocats;Fruits et Legumes;40;37
+radis;Fruits et Legumes;42;35
+betteraves;Fruits et Legumes;47;36
+choux;Fruits et Legumes;11;35
+epinards;Fruits et Legumes;49;36
+brocolis;Fruits et Legumes;49;45
+aubergines;Fruits et Legumes;49;48
+fraises;Fruits et Legumes;49;46
+cerises;Fruits et Legumes;38;37
+pate de campagne;Charcuterie LS;50;27
+rillettes;Charcuterie LS;19;28
+mortadelle;Charcuterie LS;12;28
+saucisse sèche;Charcuterie LS;47;27
+terrine de fois;Charcuterie LS;36;28
+saucisson à l'ail;Saucissons;18;19
+jambon à l'os;Charcuterie LS;50;26
+rôti de porc tranche;Charcuterie LS;49;27
+lardons fumes;Charcuterie LS;36;27
+coppa;Charcuterie LS;51;25
+pancetta;Charcuterie LS;49;27
+jambon de bayonne;Charcuterie LS;35;27
+saucisse de foie;Charcuterie LS;14;28
+pate de tête;Charcuterie LS;43;27
+moules;Poissonnerie;5;13
+filets de sole;Poissonnerie;10;9
+thon;Poissonnerie;1;14
+saint-jacques;Poissonnerie;10;11
+merlu;Poissonnerie;1;14
+bar;Poissonnerie;8;14
+dorade;Poissonnerie;6;1
+truite;Poissonnerie;11;12
+calamars;Poissonnerie;11;7
+encornets;Poissonnerie;1;15
+filets de sardines;Poissonnerie;10;0
+hareng fume;Poissonnerie;1;14
+bulots;Poissonnerie;9;9
+palourdes;Poissonnerie;11;7
+homard;Poissonnerie;10;8
+langoustines;Poissonnerie;5;14
+mozzarella;Fromage;50;16
+chèvre;Fromage;27;16
+emmental;Fromage;51;15
+cantal;Fromage;51;16
+bleu;Fromage;51;13
+tomme;Fromage;41;16
+gorgonzola;Fromage;26;16
+parmesan;Fromage;21;16
+raclette;Fromage;18;16
+boursin;Fromage;43;16
+st marcellin;Fromage;20;16
+st nectaire;Fromage;42;16
+feta;Fromage;42;16
+crottin de chavignol;Fromage;46;16
+pizza surgelée;Surgeles;23;55
+frites;Surgeles;42;56
+poêlée de legumes;Surgeles;30;63
+glace vanille;Surgeles;41;55
+nuggets de poulet;Surgeles;30;63
+gratin dauphinois;Surgeles;45;55
+epinards en branches;Surgeles;14;55
+lasagnes;Surgeles;46;55
+croissants;Surgeles;31;59
+pates aux legumes;Surgeles;50;58
+sorbet citron;Surgeles;20;65
+batonnets de poisson;Surgeles;11;55
+raviolis;Surgeles;41;55
+poisson pané;Surgeles;46;55
+glace chocolat;Surgeles;44;56
+tarte aux pommes;Surgeles;29;57
+petit pois;Surgeles;44;55
+sucre;Epicerie;74;32
+café;Epicerie;84;24
+conserves de legumes;Epicerie;79;46
+conserves de poissons;Epicerie;83;47
+thé;Epicerie;86;23
+biscuits;Patisserie Industrielle / Pain;42;68
+confiture;Epicerie;63;47
+chocolat;Epicerie;58;31
+huile;Epicerie;67;31
+vinaigre;Epicerie;78;32
+sel;Epicerie;59;40
+poivre;Epicerie;66;40
+bouillon cube;Epicerie;80;47
+lentilles;Epicerie;65;54
+pois chiches;Epicerie;79;38
+moutarde;Epicerie;87;54
+mayonnaise;Epicerie;83;54
+ketchup;Epicerie;88;54
+cornichons;Epicerie;72;36
+eau minérale;Eaux;61;9
+eau gazeuse;Eaux;54;9
+bouteilles 1.5l;Eaux;89;9
+pack de 6x50cl;Eaux;90;10
+eau aromatisée;Eaux;55;10
+eau plate;Eaux;59;9
+eau source;Eaux;76;9
+eau enrichie;Eaux;82;9
+eau gazeuse citron;Eaux;83;9
+eau au magnesium;Eaux;89;9
+eau bébé;Eaux;90;10
+eau montagne;Eaux;75;9
+vin blanc;Cave a Vins;58;24
+rosé;Cave a Vins;71;23
+champagne;Cave a Vins;73;17
+cremant;Cave a Vins;70;24
+vin bio;Cave a Vins;62;16
+vin moelleux;Cave a Vins;60;24
+vin effervescent;Cave a Vins;54;26
+vin sans alcool;Cave a Vins;72;24
+vin de bordeaux;Cave a Vins;72;16
+vin du rhône;Cave a Vins;60;16
+vin de loire;Cave a Vins;69;25
+vin de languedoc;Cave a Vins;57;24
+chaussettes;Textile;72;94
+sous-vêtements;Textile;72;67
+pyjamas;Textile;58;77
+jogging;Textile;86;68
+pulls;Textile;72;69
+jeans;Textile;76;89
+vestes;Textile;61;62
+echarpes;Textile;73;64
+bonnets;Textile;56;77
+gants;Textile;72;81
+maillots;Textile;77;89
+doudounes;Textile;80;69
+collants;Textile;85;96
+peignoirs;Textile;57;97
+boxers;Textile;79;82
+pantalons;Textile;76;76
+ustensiles de cuisine;Bazar;31;128
+lampes;Bazar;46;124
+carnets;Bazar;45;139
+decoration;Bazar;82;121
+outils;Bazar;67;114
+torchons;Bazar;55;147
+rideaux;Bazar;43;140
+horloges;Bazar;39;115
+balais;Entretien;24;115
+poubelles;Bazar;75;139
+tupperware;Bazar;89;119
+sacs;Bazar;95;114
+rangements;Bazar;65;113
+cintres;Bazar;31;129
+ciseaux;Bazar;74;138
+tapis;Bazar;97;127
+liquide vaisselle;Entretien;16;129
+nettoyant sols;Entretien;24;123
+eponges;Entretien;24;137
+desinfectant;Entretien;16;137
+lingettes;Entretien;16;113
+produit wc;Entretien;24;116
+nettoyant vitres;Entretien;24;127
+chiffons microfibres;Entretien;24;137
+savon noir;Entretien;17;131
+vinaigre menager;Entretien;24;114
+bicarbonate;Entretien;17;118
+gants menagers;Entretien;17;137
+serpillière;Entretien;25;136
+sac aspirateur;Entretien;24;131
+detartrant;Entretien;24;115
+desodorisant;Entretien;25;135
+crème solaire;Saisonnier;14;105
+gants de jardin;Saisonnier;63;105
+guirlandes de noël;Saisonnier;59;116
+chauffe-terrasse;Saisonnier;53;133
+salon de jardin;Saisonnier;45;104
+tente;Saisonnier;55;104
+transats;Saisonnier;58;105
+chauffage d'appoint;Saisonnier;73;106
+sapins;Saisonnier;52;116
+deocs halloween;Saisonnier;87;106
+lanterne;Saisonnier;64;106
+citrouilles;Saisonnier;69;106
+parfum homme;Parfumerie;38;96
+brume corporelle;Parfumerie;29;90
+deodorant;Parfumerie;50;96
+gel douche parfumé;Parfumerie;51;92
+crème hydratante;Parfumerie;40;96
+lait corporel;Parfumerie;16;90
+baume à lèvres;Parfumerie;11;96
+eau de cologne;Parfumerie;30;91
+savon parfumé;Parfumerie;50;97
+huile sèche;Parfumerie;51;93
+crème mains;Parfumerie;34;96
+croissant;Pain / Patisserie;11;139
+pain complet;Pain / Patisserie;13;115
+pain de mie;Patisserie Industrielle / Pain;32;68
+pain au chocolat;Pain / Patisserie;11;124
+pain céréales;Pain / Patisserie;11;138
+brioche;Pain / Patisserie;11;115
+pain de seigle;Pain / Patisserie;11;127
+flan;Pain / Patisserie;11;131
+eclair au chocolat;Pain / Patisserie;11;131
+muffin;Pain / Patisserie;11;132
+chausson aux pommes;Pain / Patisserie;11;125
+pain sans gluten;Pain / Patisserie;11;139
+jus d'orange;Jus de fruits;96;10
+jus de pomme;Jus de fruits;97;25
+multifruits;Jus de fruits;95;7
+nectar de mange;Jus de fruits;97;25
+smoothie;Jus de fruits;94;16
+jus de raisin;Jus de fruits;96;20
+jus d'ananas;Jus de fruits;96;11
+jus de citron;Jus de fruits;96;21
+jus de pastèque;Jus de fruits;96;8
+jus ace;Jus de fruits;95;13
+jus bio;Jus de fruits;97;19
+jus carotte;Jus de fruits;96;22
+pur jus;Jus de fruits;98;23
+crème fraîche;Ultra Frais;39;6
+desserts lactés;Ultra Frais;44;6
+beurre;Ultra Frais;50;7
+lait frais;Ultra Frais;49;8
+petits suisses;Ultra Frais;50;7
+fromage blanc;Ultra Frais;44;0
+panna cotta;Ultra Frais;36;0
+flan au caramel;Ultra Frais;30;0
+riz au lait;Ultra Frais;26;0
+donette;Ultra Frais;22;7
+mousse au chocolat;Ultra Frais;33;7
+faisselle;Ultra Frais;41;7
+crème dessert;Ultra Frais;20;7
+bière brune;Bieres;79;0
+bière ipa;Bieres;83;0
+pack 6 bouteilles;Bieres;97;0
+bière sans alcool;Bieres;57;0
+bière artisanale;Bieres;55;0
+bière fruitée;Bieres;57;0
+bière blanche;Bieres;84;0
+bière ambrée;Bieres;102;0
+bière triple;Bieres;67;1
+bière belge;Bieres;94;1
+bière pression;Bieres;92;0
+vodka;Alcools;76;16
+rhum;Alcools;90;16
+gin;Alcools;91;16
+liqueur;Alcools;84;16
+apéritif anise;Alcools;85;16
+cognac;Alcools;88;16
+armagnac;Alcools;89;16
+tequila;Alcools;89;16
+triple sec;Alcools;89;16
+porto;Alcools;86;16
+pastis;Alcools;83;16
+amaretto;Alcools;80;16
+cointreau;Alcools;77;16
+calvados;Alcools;76;16
+lait entier;Lait + Oeufs;38;18
+lait vegetal;Lait + Oeufs;42;19
+oeufs bio;Lait + Oeufs;44;19
+oeufs plein air;Lait + Oeufs;45;18
+lait ecreme;Lait + Oeufs;47;19
+oeufs extra frais;Lait + Oeufs;49;19
+lait sans lactose;Lait + Oeufs;27;19
+oeufs plein air boîte 6;Lait + Oeufs;25;19
+oeufs boîte 12;Lait + Oeufs;41;18
+lait uht;Lait + Oeufs;43;19
+mini saucissons;Saucissons;19;19
+saucisson fume;Saucissons;15;19
+saucisson au poivre;Saucissons;14;19
+saucisson aux noisettes;Saucissons;13;19
+saucisson aux herbes;Saucissons;12;19
+merguez;Saucisserie;27;26
+saucisses de toulouse;Saucisserie;26;26
+saucisses cocktail;Saucisserie;24;26
+saucisses de strasbourg;Saucisserie;23;26
+saucisses fumees;Saucisserie;21;26
+saucisses au fromage;Saucisserie;20;26
+diots;Saucisserie;18;26
+filet de dinde;Volailles;5;41
+poulet entier;Volailles;5;43
+aiguillettes;Volailles;5;46
+blancs de poulet;Volailles;5;48
+escalope de dinde;Volailles;5;50
+pilons;Volailles;5;50
+poulet fermier;Volailles;5;43
+magret de canard;Volailles;5;42
+faux filet;Boucherie;5;64
+côte de porc;Boucherie;5;71
+rôti de porc;Boucherie;5;69
+rôti de boeuf;Boucherie;5;72
+pave de boeuf;Boucherie;5;77
+tournedos;Boucherie;5;78
+bavette;Boucherie;5;58
+araignee;Boucherie;5;61
+rumsteack;Boucherie;5;64
+saute de veau;Boucherie;5;69
+côte de veau;Boucherie Trad;8;95
+steal minute;Boucherie Trad;8;84
+jarret;Boucherie Trad;8;95
+gigot;Boucherie Trad;8;96
+emince de boeuf;Boucherie Trad;8;97
+travers de porc;Rotisserie;8;113
+pommes de terre rôties;Rotisserie;8;115
+manchons de canard;Rotisserie;8;107
+jambonneau;Rotisserie;8;108
+pilons epices;Rotisserie;8;112
+quiche lorraine;Rotisserie;8;103
+hachis parmentier;Rotisserie;9;106
+lessive en capsules;Lessives;26;142
+adoucissant;Lessives;29;142
+savon detachant;Lessives;33;142
+parfum de linge;Lessives;22;142
+lessive bebe;Lessives;19;142
+lessive hypoallergenique;Lessives;23;142
+lessive en poudre;Lessives;29;143
+gateaux emballes;Patisserie Industrielle / Pain;35;68
+brioches tranchees;Patisserie Industrielle / Pain;37;68
+gaufres;Patisserie Industrielle / Pain;40;68
+tartines grillees;Patisserie Industrielle / Pain;45;68
+viennoiseries sous vide;Patisserie Industrielle / Pain;46;68
+biscottes;Patisserie Industrielle / Pain;48;68
+croquettes chat;Univers Animaux;30;75
+litière;Univers Animaux;34;75
+jouets animaux;Univers Animaux;38;75
+friandises chien;Univers Animaux;41;75
+boîtes patee;Univers Animaux;45;74
+griffoir;Univers Animaux;48;74
+arbre à chat;Univers Animaux;50;74
+collier antipuce;Univers Animaux;49;74
+gamelle;Univers Animaux;22;74
+laisse;Univers Animaux;17;74
+lingettes bebe;Univers Bebe;29;82
+lait infantile;Univers Bebe;32;82
+petits pots;Univers Bebe;34;82
+compotes;Univers Bebe;21;83
+biberons;Univers Bebe;20;83
+sucettes;Univers Bebe;28;82
+tapis d'eveil;Univers Bebe;33;83
+shampooing bebe;Univers Bebe;38;82
+gel lavant;Univers Bebe;42;82
+crème pour le change;Univers Bebe;46;82
