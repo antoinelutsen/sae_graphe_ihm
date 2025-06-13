@@ -1,7 +1,54 @@
 Produit;Rayon;Ligne;Colonne
-veste;Textile;72;69
-frommage;Fromage;20;16
-manteau;Textile;68;86
-orange;Fruits et Legumes;39;35
-lait;Lait + Oeufs;28;18
-president;Fromage;37;16
+Pommes;Fruits et Legumes;49;38
+Bananes;Fruits et Legumes;19;36
+Carottes;Fruits et Legumes;32;48
+Salades;Fruits et Legumes;49;34
+Tomates;Fruits et Legumes;47;33
+Pommes de terre;Fruits et Legumes;47;36
+Concombres;Fruits et Legumes;29;35
+Poivrons;Fruits et Legumes;39;41
+Courgettes;Fruits et Legumes;31;41
+Oignons;Fruits et Legumes;37;48
+Ail;Fruits et Legumes;21;40
+Poires;Fruits et Legumes;43;45
+Melons;Fruits et Legumes;36;39
+Jambon blanc;Charcuterie LS;38;30
+Jambon cru;Charcuterie LS;36;28
+Rosette;Charcuterie LS;45;29
+Saumon frais;Poissonnerie;6;1
+Cabillaud;Poissonnerie;8;14
+Crevettes;Poissonnerie;6;3
+Camembert;Fromage Trad;8;20
+Comte;Fromage Trad;2;28
+Roquefort;Fromage Trad;4;21
+Pizza surgelee;Surgeles;50;61
+Haricots verts;Surgeles;40;57
+Pates;Epicerie;78;49
+Riz;Epicerie;60;55
+Farine;Epicerie;58;44
+Eau minerale;Eaux;88;9
+Vin rouge;Cave a vins;64;26
+T-shirts;Textile;60;77
+Piles;Bazar;32;122
+Lessive;Entretien;18;137
+Barbecue;Saisonnier;34;102
+Parfum femme;Parfumerie;33;100
+Baguette;Pain / Patisserie;14;115
+Jus d orange;Jus de fruits;95;21
+Yaourts nature;Ultra Frais;32;6
+Bière blonde;Bieres;96;4
+Whisky;Alcools;82;13
+Lait demi-ecreme;Lait + oeufs;48;21
+Saucisson sec;Saucissons;18;21
+Chipolatas;Saucisserie;11;25
+Cuisse de poulet;Volailles;5;43
+Steak hache;Boucherie;1;64
+Entrecôte;Boucherie trad;5;86
+Poulet rôti;Rotisserie;5;119
+Lessive liquide;Lessives;25;144
+Madeleines;Patisserie industrielle / Pain;29;69
+Croquettes chien;Univers Animaux;21;72
+Couches;Univers Bebe;18;85
+Brie;Fromage;32;14
+Reblochon;Fromage;48;17
+Mimolette;Fromage;30;15
