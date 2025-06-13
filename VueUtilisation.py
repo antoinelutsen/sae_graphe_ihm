@@ -435,21 +435,6 @@ class VuePlanUtilisation(QWidget):
         pen_grid = QPen(QColor(0, 255, 0, 180))
         pen_grid.setWidth(1)
         painter.setPen(pen_grid)
-        for x in range(0, width, self.cell_size):
-            painter.drawLine(x, 0, x, height)
-        for y in range(0, height, self.cell_size):
-            painter.drawLine(0, y, width, y)
-
-        painter.setBrush(QColor(0, 0, 0))
-        painter.setPen(Qt.PenStyle.NoPen)
-        for (row, col) in self.inaccessible_cells:
-            painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
-
-        for sector in self.sectors.values():
-            painter.setBrush(QBrush(sector["color"]))
-            for (row, col) in sector["cells"]:
-                painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
-        # Dessiner le chemin si défini
         if self.points_chemin:
             pen_chemin = QPen(QColor(0, 0, 0), 3)
             painter.setPen(pen_chemin)
