@@ -7,6 +7,7 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
 from PyQt6.QtCore import Qt, pyqtSignal
 
 class VueAccueil(QWidget):
+    # Interface graphique de la page d'accueil lors du lancement de l'application, permettant de choisir entre les deux modes : création ou utilisation
     mode_selectionne = pyqtSignal(str)
 
     def __init__(self):
