@@ -64,9 +64,6 @@ class VuePlanCreation(QWidget):
         scroll_area.setWidget(scroll_content)
         right_panel.addWidget(scroll_area, stretch=4)
 
-        self.bouton_ajout = QPushButton("+ Ajouter un produit")
-        self.bouton_ajout.clicked.connect(self.ajouter_champ_produit)
-        right_panel.addWidget(self.bouton_ajout, stretch=0)
         self.bouton_sauvegarder = QPushButton("💾 Sauvegarder")
         right_panel.addWidget(self.bouton_sauvegarder, stretch=0)
 
