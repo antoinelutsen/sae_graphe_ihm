@@ -32,6 +32,7 @@ class Controleur:
                 descriptif = self.modele.get_descriptif()
                 self.vue_creation.mettre_a_jour_descriptif(descriptif)
                 self.vue_creation.bouton_info.clicked.connect(lambda : self.afficher_info_plan_creation(descriptif))
+                self.vue_creation.champsDescriptifModifies.connect(self.mettre_a_jour_descriptif_plan)
                 self.vue_creation.show()
             else:
                 QMessageBox.warning(None, "Erreur", "Mot de passe incorrect")
@@ -119,3 +120,7 @@ class Controleur:
     def afficher_info_plan_creation(self, _=None):
         descriptif = self.modele.get_descriptif()
         self.vue_creation.afficher_info_zone_plan(descriptif)
+
+    def mettre_a_jour_descriptif_plan(self, nouveau_descriptif):
+        self.modele.set_descriptif(nouveau_descriptif)
+        self.modele.sauvegarder_descriptif("description.json")

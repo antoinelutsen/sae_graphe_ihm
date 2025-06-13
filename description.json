@@ -1,10 +1,8 @@
 {
-    "auteur": "Nom de l'auteur",
-    "titre": "Nom du plan",
-    "description": "Ce plan représente l'agencement du magasin X.",
-    "date_creation": "2025-06-12",
-    "version": "1.0.0",
-    "commentaire": "Plan créé dans le cadre d’un projet IHM",
-    "etablissement": "Université Y"
-  }
-  
+  "auteur": "Groupe 10",
+  "titre": "Plan Magasin",
+  "description": "Ce plan représente l'agencement du magasin.",
+  "date_creation": "2025-06-10",
+  "commentaire": "Plan créé dans le cadre d’un projet IHM",
+  "etablissement": "IUT de Calais"
+}

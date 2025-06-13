@@ -217,3 +217,10 @@ class ModeleMagasin:
 
         print("Chemin total:", chemin_total)
         return chemin_total
+    
+    def set_descriptif(self, descriptif):
+        self.descriptif = descriptif
+
+    def sauvegarder_descriptif(self, chemin):
+        with open(chemin, "w", encoding="utf-8") as f:
+            json.dump(self.descriptif, f, ensure_ascii=False, indent=2)

@@ -9,6 +9,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 class VuePlanCreation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
+    champsDescriptifModifies = pyqtSignal(dict)
 
     def __init__(self, image_path: str, cell_size: int = 8):
         super().__init__()
@@ -41,15 +42,11 @@ class VuePlanCreation(QWidget):
         right_panel.addWidget(titre, stretch=0)
         right_panel.addWidget(texte, stretch=1)
 
-        # Après création bouton_info
-        self.zone_info = QLabel()
-        self.zone_info.setWordWrap(True)
-        self.zone_info.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        self.zone_info.setStyleSheet("background-color: #f0f0f0; border: 1px solid gray; padding: 5px;")
+        self.zone_info = QWidget()
         self.zone_info.setVisible(False)
+        self.zone_info_layout = QVBoxLayout(self.zone_info)
+        self.zone_info.setStyleSheet("background-color: #f0f0f0; border: 1px solid gray; padding: 5px;")
         right_panel.addWidget(self.zone_info)
-
-        
 
         self.bouton_info = QPushButton("i")
         self.bouton_info.setFixedWidth(25)
@@ -451,13 +448,31 @@ class VuePlanCreation(QWidget):
             self.zone_info.setVisible(True)
 
     def afficher_info_zone_plan(self, descriptif):
-        if not isinstance(descriptif, dict):
-            self.zone_info.setText("No descriptive information available.")
-            return
-        texte = "<b>Descriptif du plan</b><br>" + "<br>".join(
-            f"<b>{cle.capitalize()} :</b> {val}" for cle, val in descriptif.items()
-        )
-        self.zone_info.setText(texte)
+        while self.zone_info_layout.count():
+            item = self.zone_info_layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.deleteLater()
+
+        self.champs_edits = {}
+
+        for cle, val in descriptif.items():
+            label = QLabel(f"{cle.capitalize()} :")
+            champ = QTextEdit()
+            champ.setFixedHeight(40)
+            champ.setText(str(val))
+            champ.textChanged.connect(self.gerer_modification_descriptif)
+            self.zone_info_layout.addWidget(label)
+            self.zone_info_layout.addWidget(champ)
+            self.champs_edits[cle] = champ
+
+
 
     def mettre_a_jour_descriptif(self, descriptif: dict):
         self.descriptif_plan = descriptif
+
+    def gerer_modification_descriptif(self):
+        nouveau_descriptif = {
+            cle: champ.toPlainText() for cle, champ in self.champs_edits.items()
+        }
+        self.champsDescriptifModifies.emit(nouveau_descriptif)
