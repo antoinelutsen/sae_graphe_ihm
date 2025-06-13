@@ -1,0 +1,10 @@
+{
+    "auteur": "Nom de l'auteur",
+    "titre": "Nom du plan",
+    "description": "Ce plan représente l'agencement du magasin X.",
+    "date_creation": "2025-06-12",
+    "version": "1.0.0",
+    "commentaire": "Plan créé dans le cadre d’un projet IHM",
+    "etablissement": "Université Y"
+  }
+  
