@@ -420,6 +420,8 @@ class VuePlanCreation(QWidget):
                 rel_y = y - self.plan_frame.y()
                 row = int(rel_y / self.cell_size)
                 col = int(rel_x / self.cell_size)
+                if (row, col) in self.inaccessible_cells:
+                    return
                 self.celluleCliquee.emit(row, col)
 
     def get_secteurs_et_cases(self):
