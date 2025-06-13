@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import (
     QTextEdit, QScrollArea, QFrame, QMessageBox
 )
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QBrush
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer
 
 class VuePlanUtilisation(QWidget):
     celluleCliquee = pyqtSignal(int, int)
@@ -76,7 +76,10 @@ class VuePlanUtilisation(QWidget):
         right_panel.addWidget(self.bouton_ajout, stretch=0)
 
         self.descriptif_plan = {}
-        self.chemin = []
+        self.timer_chemin = QTimer()
+        self.points_chemin = []
+        self.index_chemin = 0
+        self.chemin_a_afficher = []
         self.inaccessible_cells = {
 
             ( 15 , 3 ),( 15 , 4 ),( 15 , 5 ),( 16 , 3 ),( 16 , 4 ),( 16 , 5 ),( 17 , 3 ),( 17 , 4 ),( 17 , 5 ),( 18 , 3 ),( 18 , 4 ),( 18 , 5 ),( 19 , 3 ),( 19 , 4 ),( 19 , 5 ),( 20 , 3 ),( 20 , 4 ),( 20 , 5 ),( 21 , 3 ),( 21 , 4 ),( 21 , 5 ),( 22 , 3 ),( 22 , 4 ),( 22 , 5 ),( 23 , 3 ),( 23 , 4 ),( 23 , 5 ),( 24 , 3 ),( 24 , 4 ),( 24 , 5 ),( 25 , 3 ),( 25 , 4 ),( 25 , 5 ),( 26 , 3 ),( 26 , 4 ),( 26 , 5 ),( 27 , 3 ),( 27 , 4 ),( 27 , 5 ),( 28 , 3 ),( 28 , 4 ),( 28 , 5 ),( 29 , 3 ),( 29 , 4 ),( 29 , 5 ),( 30 , 3 ),( 30 , 4 ),( 30 , 5 ),( 31 , 3 ),( 31 , 4 ),( 31 , 5 ),( 32 , 3 ),( 32 , 4 ),( 32 , 5 ),( 33 , 3 ),( 33 , 4 ),( 33 , 5 ),( 34 , 3 ),( 34 , 4 ),( 34 , 5 ),( 35 , 3 ),( 35 , 4 ),( 35 , 5 ),( 36 , 3 ),( 36 , 4 ),( 36 , 5 ),( 37 , 3 ),( 37 , 4 ),( 37 , 5 ),( 38 , 3 ),( 38 , 4 ),( 38 , 5 ),( 39 , 3 ),( 39 , 4 ),( 39 , 5 ),( 40 , 3 ),( 40 , 4 ),( 40 , 5 ),( 41 , 3 ),( 41 , 4 ),( 41 , 5 ),( 42 , 3 ),( 42 , 4 ),( 42 , 5 ),( 43 , 3 ),( 43 , 4 ),( 43 , 5 ),( 44 , 3 ),( 44 , 4 ),( 44 , 5 ),( 45 , 3 ),( 45 , 4 ),( 45 , 5 ),( 46 , 3 ),( 46 , 4 ),( 46 , 5 ),( 47 , 3 ),( 47 , 4 ),( 47 , 5 ),( 48 , 3 ),( 48 , 4 ),( 48 , 5 ),( 49 , 3 ),( 49 , 4 ),( 49 , 5 ),( 50 , 3 ),( 50 , 4 ),( 50 , 5 ),
@@ -447,17 +450,15 @@ class VuePlanUtilisation(QWidget):
             for (row, col) in sector["cells"]:
                 painter.drawRect(col * self.cell_size, row * self.cell_size, self.cell_size, self.cell_size)
         # Dessiner le chemin si défini
-        if self.chemin:
-            pen_path = QPen(Qt.GlobalColor.black)
-            pen_path.setWidth(4)
-            painter.setPen(pen_path)
-            for i in range(len(self.chemin) - 1):
-                x1 = self.chemin[i][1] * self.cell_size + self.cell_size // 2
-                y1 = self.chemin[i][0] * self.cell_size + self.cell_size // 2
-                x2 = self.chemin[i + 1][1] * self.cell_size + self.cell_size // 2
-                y2 = self.chemin[i + 1][0] * self.cell_size + self.cell_size // 2
+        if self.points_chemin:
+            pen_chemin = QPen(QColor(0, 0, 0), 3)
+            painter.setPen(pen_chemin)
+            for i in range(len(self.points_chemin) - 1):
+                x1 = self.points_chemin[i][1] * self.cell_size + self.cell_size // 2
+                y1 = self.points_chemin[i][0] * self.cell_size + self.cell_size // 2
+                x2 = self.points_chemin[i + 1][1] * self.cell_size + self.cell_size // 2
+                y2 = self.points_chemin[i + 1][0] * self.cell_size + self.cell_size // 2
                 painter.drawLine(x1, y1, x2, y2)
-        
 
     def mousePressEvent(self, event):
         pos = event.position().toPoint()
@@ -489,10 +490,22 @@ class VuePlanUtilisation(QWidget):
         ]
 
     def afficher_chemin(self, chemin):
-        print("Chemin reçu par la vue :", chemin)
-        self.chemin = chemin
-        self.update()
-        
+        self.chemin_a_afficher = chemin
+        self.points_chemin = []
+        self.index_chemin = 0
+        self.timer_chemin.stop()
+        self.timer_chemin.timeout.connect(self._tracer_segment_suivant)
+        self.timer_chemin.start(30)  # vitesse (ms) entre chaque point
+
+    def _tracer_segment_suivant(self):
+        if self.index_chemin < len(self.chemin_a_afficher):
+            point = self.chemin_a_afficher[self.index_chemin]
+            self.points_chemin.append(point)
+            self.index_chemin += 1
+            self.update()
+        else:
+            self.timer_chemin.stop()
+
     def notifier_changement_produits(self):
         produits = self.get_produits_saisis()
         self.produitsModifies.emit(produits)
