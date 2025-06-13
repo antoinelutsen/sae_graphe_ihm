@@ -65,11 +65,10 @@ class ModeleMagasin:
             for ligne in lecteur:
                 produit = ligne["Produit"].strip()
                 rayon = ligne["Rayon"].strip()
-                row = int(ligne["Ligne"])
-                col = int(ligne["Colonne"])
                 if produit and rayon:
                     produit_norm = normaliser_texte(produit)
-                    self.produit_vers_rayon[produit_norm] = rayon
+                    rayon_norm = normaliser_texte(rayon)
+                    self.produit_vers_rayon[produit_norm] = rayon_norm
 
     def get_rayon(self, produit: str) -> str | None: # Retourne le rayon associé à un produit (normalisé) et None s'il n'existe pas
         produit_norm = normaliser_texte(produit)
