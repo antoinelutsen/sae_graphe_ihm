@@ -40,6 +40,7 @@ class ModeleMagasin:
         self.produits_positionnes = {}
         self.descriptif = {}
         self.toutes_les_cases = None
+        self.produits_places = []
         max_col = 1200 // 8  # nombre de colonnes
         max_row = 1000 // 8  # nombre de lignes
         self.initialiser_toutes_les_cases(max_row, max_col)
@@ -119,6 +120,47 @@ class ModeleMagasin:
         if not cases_libres:
             return None
         return random.choice(cases_libres)
+
+
+    def charger_ou_placer_produits(self, chemin_places: str):
+        # Charge les produits déjà placés depuis produits_place.csv
+        # Si un produit n'est pas encore placé, lui attribue une case disponible
+        # Met à jour la liste interne des produits placés
+        produits_rayon = {}
+
+        produits_deja_places = {}
+        try:
+            with open(chemin_places, newline='', encoding='utf-8') as f:
+                reader = csv.reader(f, delimiter=';')
+                next(reader)
+                for ligne in reader:
+                    if len(ligne) >= 4:
+                        produit = ligne[0].strip().lower()
+                        rayon = ligne[1].strip()
+                        ligne_pos = int(ligne[2])
+                        col_pos = int(ligne[3])
+                        produits_deja_places[produit] = (rayon, ligne_pos, col_pos)
+        except FileNotFoundError:
+            pass
+
+        nouveaux_produits = []
+        for produit, rayon in produits_rayon.items():
+            if produit not in produits_deja_places:
+                position = self.attribuer_position(rayon)
+                if position:
+                    produits_deja_places[produit] = (rayon, position[0], position[1])
+                    self.positions_utilisées.add(position)
+                    nouveaux_produits.append((produit, rayon, position[0], position[1]))
+
+        if nouveaux_produits:
+            with open(chemin_places, "a", newline='', encoding='utf-8') as f:
+                writer = csv.writer(f, delimiter=';')
+                for p in nouveaux_produits:
+                    writer.writerow(p)
+
+        self.produits_places = []
+        for produit, (rayon, row, col) in produits_deja_places.items():
+            self.produits_places.append((produit, rayon, row, col))
     
     def construire_chemin_depuis_entree(self, entree: tuple[int, int], produits: list[str]) -> list[tuple[int, int]]:
         accessibles = self.toutes_les_cases - self.inaccessible_cells

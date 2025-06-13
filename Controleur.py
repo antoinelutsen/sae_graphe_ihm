@@ -42,6 +42,7 @@ class Controleur:
             self.vue_utilisation.celluleCliquee.connect(self.traiter_clic_utilisation)
             donnees_vue = self.vue_utilisation.get_secteurs_et_cases()
             self.modele.set_grille_magasin(donnees_vue["sectors"], donnees_vue["inaccessibles"])
+            self.modele.charger_ou_placer_produits("produits_place.csv")
             self.vue_utilisation.produitsModifies.connect(self.mettre_a_jour_chemin)
             self.position_entree = (101, 108)
             self.positions_sortie = self.modele.get_cases_secteur("Sortie")
