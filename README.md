@@ -1,7 +1,7 @@
 SAE Graphe
 
 Membres du groupe :
-Dorian Hembert tpa - 
+Dorian Hembert tpa - HembertD
 Scott Sénéchal tpe - 
 Antoine Lutsen tpa - 
 Antoine Molinaro tpa - AM2240
