@@ -1,0 +1,33 @@
+Compte rendu :
+
+Nous avions déjà commencé une partie du projet avant la SAE.
+
+Mardi 10 juin :
+
+Ce jour, Dorian : codage sur le mcv : code sur la vue, le contrôleur et modèle.
+	 Scott : a travaillé sur le main
+	 Antoine L : a répertorié les différents secteurs (rayons/zone où l'on peut trouver une famille de produits) et les a codés dans sa branche de la vue.
+	 Antoine M : a repéré les zones où un client ne peut marcher (rayons et présentoirs) et les a codés dans sa branche de la vue. Création du readme. Rédaction du compte rendu.
+	 
+	 
+Mercredi 11 juin :
+	Dorian : a travaillé la description_v1 et la séparation des deux applications.
+	Scott : a commenté une partie du code et à codé une fonction.
+	Antoine L : a répertorié les différents secteurs et les a codés dans sa branche de la vue.
+	Antoine M : a repéré les zones où un client ne peut marcher (rayons et présentoirs) et les a codés dans sa branche de la vue. Rédaction du compte rendu.
+	
+	Nous avons été confrontés à des problèmes avec le quadrillage et les positions des secteurs et des zones inaccessibles. Selon les ordinateurs, les positions de ces zones étaient différentes. Nous avons donc dû refaire toutes les zones et secteurs en partant de zéro.
+
+Jeudi 12 juin :
+	Dorian : corrections sur les deux applications. Début de la partie graphe. Modifications dans l'architecture des branches.
+	Scott : a travaillé sur le JSON
+	Antoine L : a continué le fichier JSON. Recherche d'optimisation des branches car certaines pourront être supprimées.
+	Antoine M : a fait face à des problèmes avec git () qui ont ensuite été résolus. Résolution de conflits avec la vue et les cases inaccessibles. Rédaction du compte rendu.
+	
+	Nous nous sommes rendus compte que la branche main n'était pas mère des autres branches. Nous redoutons des erreurs lorsque nous remettrons tout sur la branche main. Il y a peut-être d'autres problèmes d'architecture.
+
+Vendredi 13 juin :
+	Dorian : Complément sur des fonctions. Ajout de la fonctionnalité "i" informations sur les deux applications. Complément du fichier CSV pour les vues. Améliorations sur les vues et l'interface. Correction d'erreurs.
+	Scott : Ajout de commentaires sur le code. Ecriture du fichier des produits et de leurs coordonnées.
+	Antoine L : Implémentation d'un système permettant d'importer une liste de courses et d'obtenir ensuite un parcours pour récupérer les articles le plus efficacement possible. Modifications de fichiers CSV et JSON.
+	Antoine M : Rédaction de la notice d'utilisation pour l'application administrateur. Modification du readme. Rédaction du compte rendu.
